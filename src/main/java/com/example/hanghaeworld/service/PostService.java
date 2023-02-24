@@ -39,4 +39,22 @@ public class PostService {
         postRepository.save(post);
         return new PostResponseDto(post);
     }
+
+    public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto, User user) {
+        Post post = getPost(postId);
+        confirm(post, user);
+    }
+
+    private Post getPost(Long postId) {
+        return postRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("없는 게시글입니다.")
+        );
+    }
+
+    private void confirm(Post post, User user) {
+        if(post.getUser().getUsername().equals(user.getUsername()) || ){
+            return;
+        }
+        throw new IllegalArgumentException("권한이 없습니다.");
+    }
 }

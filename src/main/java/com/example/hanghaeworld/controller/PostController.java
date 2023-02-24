@@ -1,7 +1,5 @@
 package com.example.hanghaeworld.controller;
 
-
-import com.example.hanghaeworld.dto.CommentRequestDto;
 import com.example.hanghaeworld.dto.PostRequestDto;
 import com.example.hanghaeworld.dto.PostResponseDto;
 import com.example.hanghaeworld.security.UserDetailsImpl;
@@ -20,7 +18,7 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/post/{userId}")
-    public List<PostResponseDto> getPostList(@PathVariable Long userId){
+    public List<PostResponseDto> getPostList(@PathVariable Long userId) {
         return postService.getPostList(userId);
     }
 
@@ -29,6 +27,13 @@ public class PostController {
                                      @RequestBody PostRequestDto postRequestDto,
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.writePost(userId, postRequestDto, userDetails.getUser());
+    }
+
+    @PutMapping("/post/{postId}")
+    public PostResponseDto updatePost(@PathVariable Long postId,
+                                      @RequestBody PostRequestDto postRequestDto,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.updatePost(postId, postRequestDto, userDetails.getUser());
     }
 
 }
