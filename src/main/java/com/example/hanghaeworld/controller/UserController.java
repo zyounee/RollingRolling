@@ -2,6 +2,8 @@ package com.example.hanghaeworld.controller;
 
 import com.example.hanghaeworld.dto.LoginRequestDto;
 import com.example.hanghaeworld.dto.SignupRequestDto;
+import com.example.hanghaeworld.dto.UserSearchRequestDto;
+import com.example.hanghaeworld.dto.UserSearchResponseDto;
 import com.example.hanghaeworld.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
@@ -42,6 +44,11 @@ public class UserController {
     @PostMapping("/login")
     public void login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
         userService.login(loginRequestDto, response);
+    }
+
+    @GetMapping("/search")
+    public UserSearchResponseDto search(@RequestBody UserSearchRequestDto userSearchRequestDto){
+        return userService.search(userSearchRequestDto);
     }
 
 

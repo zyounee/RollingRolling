@@ -6,6 +6,7 @@ import com.example.hanghaeworld.dto.PostResponseDto;
 import com.example.hanghaeworld.dto.VisitPostDto;
 import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.PostService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 public class PostController {
 
     private final PostService postService;
+
 
     @GetMapping("/post/mypost/{userId}")
     public MyPostDto getMyPost(@PathVariable Long userId,
