@@ -1,13 +1,9 @@
 package com.example.hanghaeworld.service;
 
-import com.example.hanghaeworld.dto.MyPostDto;
-import com.example.hanghaeworld.dto.PostRequestDto;
-import com.example.hanghaeworld.dto.PostResponseDto;
-import com.example.hanghaeworld.dto.VisitPostDto;
-import com.example.hanghaeworld.entity.Post;
-import com.example.hanghaeworld.entity.User;
-import com.example.hanghaeworld.repository.PostRepository;
-import com.example.hanghaeworld.repository.UserRepository;
+import com.example.hanghaeworld.dto.*;
+import com.example.hanghaeworld.entity.*;
+import com.example.hanghaeworld.repository.*;
+import com.example.hanghaeworld.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +17,9 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
+    private final LikesRepository likesRepository;
 
     @Transactional(readOnly = true)
     public MyPostDto getMyPost(Long userId, User user) {
@@ -95,5 +94,40 @@ public class PostService {
             return;
         }
         throw new IllegalArgumentException("권한이 없습니다.");
+    }
+
+
+
+    public LikeResponseDto like(LikeRequestDto likeRequestDto, Long postId, UserDetailsImpl userDetails) {
+       Post post =  postRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("없는 게시글입니다.")
+        );
+        Like like = (new Like(likeRequestDto, post, userDetails.getUser()));
+        if (likeRequestDto.isLike() == true) {
+            likeRepository.saveAndFlush(new Like(likeRequestDto, post, userDetails.getUser()));
+            if (likeRepository.findByPost_IdAndUser_Id(userDetails.getUser().getId(), post.getId()).isPresent()) {
+            }
+        } else {
+            likeRepository.deleteById(userDetails.getUser().getId());
+            return null;
+        }
+        return new LikeResponseDto(like);
+    }
+
+    public LikesResponseDto likes(LikeRequestDto likeRequestDto, Long commentId, UserDetailsImpl userDetails) {
+        Comment comment =  commentRepository.findById(commentId).orElseThrow(
+                () -> new IllegalArgumentException("없는 게시글입니다.")
+        );
+        Likes likes = (new Likes(likeRequestDto, comment, userDetails.getUser()));
+        if (likeRequestDto.isLike() == true)
+        {
+            likesRepository.saveAndFlush(new Likes(likeRequestDto, comment, userDetails.getUser()));
+            if (likesRepository.findByComment_IdAndUser_Id(userDetails.getUser().getId(), comment.getId()).isPresent()) {
+            }
+        } else {
+            likesRepository.deleteById(userDetails.getUser().getId());
+            return null;
+        }
+        return new LikesResponseDto(likes);
     }
 }
