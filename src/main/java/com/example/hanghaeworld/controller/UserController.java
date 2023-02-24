@@ -28,7 +28,7 @@ public class UserController {
     public ModelAndView signup(@RequestBody SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("signup");
+        modelAndView.setViewName("login");
         return modelAndView;
     }
 

@@ -17,9 +17,9 @@ public class Comment extends TimeStamped {
     @Column(nullable = false)
     private String content;
 
-//    @OneToOne
-//    @JoinColumn(name = "post_id", nullable = false)
-//    private Post post;
+    @OneToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
