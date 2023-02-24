@@ -11,6 +11,8 @@ import com.example.hanghaeworld.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -20,7 +22,7 @@ public class CommentService {
         Post post = postRepository.findById(postid).orElseThrow(
                 () -> new IllegalArgumentException("질문이 없습니다")
         );
-        if (post.getMaster().getUsername() == userDetails.getUsername()){
+        if (Objects.equals(post.getMaster().getUsername(), userDetails.getUsername())){
             Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto));
             return new CommentResponseDto(comment);
         }else{
