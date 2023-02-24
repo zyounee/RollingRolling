@@ -1,5 +1,6 @@
 package com.example.hanghaeworld.entity;
 
+import com.example.hanghaeworld.dto.CommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,8 @@ public class Comment extends TimeStamped {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public Comment(CommentRequestDto commentRequestDto){
+        this.content = commentRequestDto.getContent();
+    }
 }
