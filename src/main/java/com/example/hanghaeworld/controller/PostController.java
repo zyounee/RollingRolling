@@ -1,9 +1,6 @@
 package com.example.hanghaeworld.controller;
 
-import com.example.hanghaeworld.dto.MyPostDto;
-import com.example.hanghaeworld.dto.PostRequestDto;
-import com.example.hanghaeworld.dto.PostResponseDto;
-import com.example.hanghaeworld.dto.VisitPostDto;
+import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -52,4 +49,13 @@ public class PostController {
         postService.deletePost(postId, userDetails.getUser());
     }
 
+    @PostMapping("/like/{postId}")
+    public LikeResponseDto like(@RequestBody LikeRequestDto likeRequestDto, @PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.like(likeRequestDto, postId, userDetails);
+    }
+
+    @PostMapping("/like/{commentId}")
+    public LikesResponseDto likes(@RequestBody LikeRequestDto likeRequestDto, @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.likes(likeRequestDto, commentId, userDetails);
+    }
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +34,9 @@ public class Post extends TimeStamped {
 
     @OneToOne(mappedBy = "post")
     private Comment comment;
+
+    @OneToMany(mappedBy = "post")
+    private List<Like> likes = new ArrayList<>();
 
     public Post(User master, PostRequestDto postRequestDto, User user) {
         this.master = master;
