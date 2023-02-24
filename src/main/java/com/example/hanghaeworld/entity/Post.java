@@ -24,6 +24,8 @@ public class Post extends TimeStamped {
     @Column(nullable = false)
     private boolean anonymous;
 
+    private String image;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "master_id", nullable = false)
     private User master;
@@ -41,6 +43,7 @@ public class Post extends TimeStamped {
     public Post(User master, PostRequestDto postRequestDto, User user) {
         this.master = master;
         this.content = postRequestDto.getContent();
+        this.image = postRequestDto.getImage();
         this.visitor = user;
         this.anonymous = postRequestDto.getAnonymous();
     }
