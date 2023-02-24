@@ -14,15 +14,15 @@ public class PostResponseDto {
     private String content;
     private LocalDateTime createdAt;
     private CommentResponseDto commentResponseDto;
-    private int like;
     private int likes;
+
     public PostResponseDto(Post post) {
         this.postId = post.getId();
         this.nickName = post.isAnonymous() ? "익명" : post.getVisitor().getNickname();
         this.content = post.getContent();
         this.createdAt = post.getCreatedAt();
         this.commentResponseDto = new CommentResponseDto(post.getComment());
-        this.like = post.getLikes().size();
-        this.likes = post.getComment().getLikes().size();
+        this.likes = post.getLikes().size();
+
     }
 }
