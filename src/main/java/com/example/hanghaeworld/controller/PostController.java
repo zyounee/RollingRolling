@@ -6,7 +6,6 @@ import com.example.hanghaeworld.dto.PostResponseDto;
 import com.example.hanghaeworld.dto.VisitPostDto;
 import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.PostService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

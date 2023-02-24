@@ -13,6 +13,7 @@ public class CommentResponseDto {
     private String content;
     private String nickName;
     private LocalDateTime createdAt;
+    private int likes;
 
     public CommentResponseDto(Comment comment){
         this.commentId = comment.getId();
