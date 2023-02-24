@@ -23,7 +23,7 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public MyPostDto getMyPost(Long userId) {
+    public MyPostDto getMyPost(Long userId, User user) {
         List<Post> posts = postRepository.findAllByMasterId(userId);
 
         List<PostResponseDto> newPostList = new ArrayList<>();
