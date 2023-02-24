@@ -33,10 +33,11 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    public User(String username, String password, String nickName, String email) {
+    public User(String username, String password, String nickName, String email, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.nickname = nickName;
         this.email = email;
+        this.role = role;
     }
 }
