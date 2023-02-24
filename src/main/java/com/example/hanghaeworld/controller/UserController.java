@@ -6,6 +6,7 @@ import com.example.hanghaeworld.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,19 +18,25 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/signup")
-    public String signup(){
-        return "signup";
+    public ModelAndView signup(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("signup");
+        return modelAndView;
     }
 
     @PostMapping("/signup")
-    public String signup(@RequestBody SignupRequestDto signupRequestDto) {
+    public ModelAndView signup(@RequestBody SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
-        return "login";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("signup");
+        return modelAndView;
     }
 
     @GetMapping("/login")
-    public String login(){
-        return "login";
+    public ModelAndView login(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
     }
 
     @PostMapping("/login")
