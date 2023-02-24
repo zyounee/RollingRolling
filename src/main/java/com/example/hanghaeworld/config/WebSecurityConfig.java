@@ -36,7 +36,7 @@ public class WebSecurityConfig {
         http.csrf().disable();
 
         http.authorizeRequests().antMatchers("/api/user/**").permitAll()
-                .antMatchers("/api/memos/**").permitAll()
+                .antMatchers("/api").permitAll()
                 .antMatchers().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
