@@ -24,12 +24,10 @@ public class UserService {
 
     @Transactional
     public void signup(@Valid SignupRequestDto signupRequestDto){
-
         String username = signupRequestDto.getUsername();
         String password = signupRequestDto.getPassword();
         String nickName = signupRequestDto.getNickName();
         String email = signupRequestDto.getEmail();
-
 
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()){

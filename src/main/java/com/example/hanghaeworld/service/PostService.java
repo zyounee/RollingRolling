@@ -23,7 +23,7 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public MyPostDto getMyPost(Long userId) {
+    public MyPostDto getMyPost(Long userId, User user) {
         List<Post> posts = postRepository.findAllByMasterId(userId);
 
         List<PostResponseDto> newPostList = new ArrayList<>();
@@ -31,11 +31,11 @@ public class PostService {
         for (Post post : posts) {
             if (post.getComment() == null) {
                 newPostList.add(new PostResponseDto(post));
-            } else {
-                postList.add(new PostResponseDto(post));
+                continue;
             }
+            postList.add(new PostResponseDto(post));
         }
-        return new MyPostDto(newPostList, postList);
+        return new MyPostDto(user, newPostList, postList);
     }
 
     @Transactional(readOnly = true)
@@ -47,18 +47,16 @@ public class PostService {
         for (Post post : posts) {
             if (post.getVisitor().getUsername().equals(user.getUsername())) {
                 myPostList.add(new PostResponseDto(post));
-            } else {
-                postList.add(new PostResponseDto(post));
+                continue;
             }
+            postList.add(new PostResponseDto(post));
         }
-        return new VisitPostDto(myPostList, postList);
+        return new VisitPostDto(user, myPostList, postList);
     }
 
     @Transactional
     public PostResponseDto writePost(Long userId, PostRequestDto postRequestDto, User user) {
-        User master = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("없는 회원입니다.")
-        );
+        User master = getUser(userId);
         Post post = new Post(master, postRequestDto, user);
         postRepository.save(post);
         return new PostResponseDto(post);
@@ -77,6 +75,12 @@ public class PostService {
         Post post = getPost(postId);
         confirm(post, user);
         postRepository.delete(post);
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("없는 회원입니다.")
+        );
     }
 
     private Post getPost(Long postId) {
