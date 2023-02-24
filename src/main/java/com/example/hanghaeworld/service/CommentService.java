@@ -18,12 +18,12 @@ import java.util.Objects;
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    public CommentResponseDto commentwrite(Long postid, CommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
+    public CommentResponseDto commentWrite(Long postid, CommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
         Post post = postRepository.findById(postid).orElseThrow(
                 () -> new IllegalArgumentException("질문이 없습니다")
         );
         if (Objects.equals(post.getMaster().getUsername(), userDetails.getUsername())){
-            Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto));
+            Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto,post));
             return new CommentResponseDto(comment);
         }else{
             throw new IllegalArgumentException("마스터가 아닙니다");

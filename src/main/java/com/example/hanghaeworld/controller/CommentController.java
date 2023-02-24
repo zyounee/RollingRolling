@@ -16,7 +16,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comment/{postid}")
-    public CommentResponseDto Commentwrite(@PathVariable Long postid, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.commentwrite(postid, commentRequestDto, userDetails);
+    public CommentResponseDto commentWrite(@PathVariable Long postid, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.commentWrite(postid, commentRequestDto, userDetails);
     }
 }
