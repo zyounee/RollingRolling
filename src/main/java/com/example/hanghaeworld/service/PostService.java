@@ -9,6 +9,7 @@ import com.example.hanghaeworld.entity.User;
 import com.example.hanghaeworld.repository.PostRepository;
 import com.example.hanghaeworld.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,34 +25,31 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public MyPostDto getMyPost(Long userId, User user) {
-        List<Post> posts = postRepository.findAllByMasterId(userId);
-
+        List<Post> newPosts = postRepository.findByMaster_IdAndCommentNullOrderByCreatedAtAsc(userId);
         List<PostResponseDto> newPostList = new ArrayList<>();
-        List<PostResponseDto> postList = new ArrayList<>();
-        for (Post post : posts) {
-            if (post.getComment() == null) {
-                newPostList.add(new PostResponseDto(post));
-                continue;
-            }
-            postList.add(new PostResponseDto(post));
+        for (Post post : newPosts) {
+            newPostList.add(new PostResponseDto(post));
         }
-        return new MyPostDto(user, newPostList, postList);
+
+        Pageable pageable = getPageable(1);
+        List<Post> postList = postRepository.findByMaster_IdAndCommentNotNull(userId, pageable);
+        Page<PostResponseDto> page = getPage(pageable, postList);
+        return new MyPostDto(user, newPostList, page);
     }
 
     @Transactional(readOnly = true)
     public VisitPostDto getVisitPost(Long userId, User user) {
-        List<Post> posts = postRepository.findAllByMasterId(userId);
-
+        List<Post> myPosts = postRepository.findByMaster_IdAndVisitor_IdOrderByCreatedAtDesc(userId, user.getId());
         List<PostResponseDto> myPostList = new ArrayList<>();
-        List<PostResponseDto> postList = new ArrayList<>();
-        for (Post post : posts) {
-            if (post.getVisitor().getUsername().equals(user.getUsername())) {
-                myPostList.add(new PostResponseDto(post));
-                continue;
-            }
-            postList.add(new PostResponseDto(post));
+        for (Post post : myPosts) {
+            myPostList.add(new PostResponseDto(post));
         }
-        return new VisitPostDto(user, myPostList, postList);
+
+        Pageable pageable = getPageable(1);
+        List<Post> posts = postRepository.findByMaster_IdAndVisitor_IdNot(userId, user.getId(), pageable);
+        Page<PostResponseDto> page = getPage(pageable, posts);
+
+        return new VisitPostDto(user, myPostList, page);
     }
 
     @Transactional
@@ -78,22 +76,32 @@ public class PostService {
     }
 
     private User getUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("없는 회원입니다.")
-        );
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("없는 회원입니다."));
     }
 
     private Post getPost(Long postId) {
-        return postRepository.findById(postId).orElseThrow(
-                () -> new IllegalArgumentException("없는 게시글입니다.")
-        );
+        return postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("없는 게시글입니다."));
+    }
+
+    private Pageable getPageable(int page) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page - 1, 3, sort);
+        return pageable;
+    }
+
+    private Page<PostResponseDto> getPage(Pageable pageable, List<Post> posts) {
+        List<PostResponseDto> postList = new ArrayList<>();
+        for (Post post : posts) {
+            postList.add(new PostResponseDto(post));
+        }
+        return new PageImpl<>(postList, pageable, postList.size());
     }
 
     private void confirm(Post post, User user) {
-        if (post.getMaster().getUsername().equals(user.getUsername()) ||
-                (post.getComment() == null && post.getVisitor().equals(user.getUsername()))) {
+        if (post.getMaster().getUsername().equals(user.getUsername()) || (post.getComment() == null && post.getVisitor().equals(user.getUsername()))) {
             return;
         }
+
         throw new IllegalArgumentException("권한이 없습니다.");
     }
 }
