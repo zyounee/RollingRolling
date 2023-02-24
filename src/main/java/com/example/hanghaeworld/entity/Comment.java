@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Comment {
+public class Comment extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
