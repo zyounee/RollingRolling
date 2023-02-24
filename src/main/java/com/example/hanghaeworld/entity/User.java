@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity(name = "users")
 @Getter
@@ -22,16 +23,17 @@ public class User {
     @Column(nullable = false)
     private String nickname;
     @Column
+    @Email
     private String email;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    public User(String username, String password, String email, UserRoleEnum role) {
+    public User(String username, String password, String nickName, String email) {
         this.username = username;
         this.password = password;
+        this.nickname = nickName;
         this.email = email;
-        this.role = role;
     }
 }
