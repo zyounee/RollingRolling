@@ -32,7 +32,7 @@ public class UserService {
     public void signup(@Valid SignupRequestDto signupRequestDto){
         String username = signupRequestDto.getUsername();
         String password = signupRequestDto.getPassword();
-        String nickName = signupRequestDto.getNickName();
+        String nickname = signupRequestDto.getNickname();
         String email = signupRequestDto.getEmail();
 
         Optional<User> found = userRepository.findByUsername(username);
@@ -41,7 +41,7 @@ public class UserService {
         }
         UserRoleEnum role = UserRoleEnum.USER;
 
-        User user = new User(username, password, nickName, email, role);
+        User user = new User(username, password, nickname, email, role);
         userRepository.save(user);
     }
 
