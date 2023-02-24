@@ -24,7 +24,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public MyPostDto getMyPost(Long userId) {
-        List<Post> posts = postRepository.findAllByUserId(userId);
+        List<Post> posts = postRepository.findAllByMasterId(userId);
 
         List<PostResponseDto> newPostList = new ArrayList<>();
         List<PostResponseDto> postList = new ArrayList<>();
@@ -40,7 +40,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public VisitPostDto getVisitPost(Long userId, User user) {
-        List<Post> posts = postRepository.findAllByUserId(userId);
+        List<Post> posts = postRepository.findAllByMasterId(userId);
 
         List<PostResponseDto> myPostList = new ArrayList<>();
         List<PostResponseDto> postList = new ArrayList<>();
