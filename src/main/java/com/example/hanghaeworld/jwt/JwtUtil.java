@@ -1,9 +1,10 @@
 //package com.example.hanghaeworld.jwt;
 //
-//import com.sparta.crud.entity.UserRoleEnum;
-//import com.sparta.crud.security.UserDetailsServiceImpl;
+//import com.example.hanghaeworld.entity.UserRoleEnum;
+//import com.example.hanghaeworld.security.UserDetailsServiceImpl;
 //import io.jsonwebtoken.*;
 //import io.jsonwebtoken.security.Keys;
+//import com.example.hanghaeworld.security.UserDetailsServiceImpl;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.beans.factory.annotation.Value;
