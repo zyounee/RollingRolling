@@ -1,7 +1,9 @@
 package com.example.hanghaeworld.service;
 
+import com.example.hanghaeworld.dto.MyPostDto;
 import com.example.hanghaeworld.dto.PostRequestDto;
 import com.example.hanghaeworld.dto.PostResponseDto;
+import com.example.hanghaeworld.dto.VisitPostDto;
 import com.example.hanghaeworld.entity.Post;
 import com.example.hanghaeworld.entity.User;
 import com.example.hanghaeworld.repository.PostRepository;
@@ -21,13 +23,35 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<PostResponseDto> getPostList(Long userId) {
-        List<Post> postList = postRepository.findAllByUserId(userId);
-        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
-        for (Post post : postList) {
-            postResponseDtoList.add(new PostResponseDto(post));
+    public MyPostDto getMyPost(Long userId) {
+        List<Post> posts = postRepository.findAllByUserId(userId);
+
+        List<PostResponseDto> newPostList = new ArrayList<>();
+        List<PostResponseDto> postList = new ArrayList<>();
+        for (Post post : posts) {
+            if (post.getComment() == null) {
+                newPostList.add(new PostResponseDto(post));
+            } else {
+                postList.add(new PostResponseDto(post));
+            }
         }
-        return postResponseDtoList;
+        return new MyPostDto(newPostList, postList);
+    }
+
+    @Transactional(readOnly = true)
+    public VisitPostDto getVisitPost(Long userId, User user) {
+        List<Post> posts = postRepository.findAllByUserId(userId);
+
+        List<PostResponseDto> myPostList = new ArrayList<>();
+        List<PostResponseDto> postList = new ArrayList<>();
+        for (Post post : posts) {
+            if (post.getVisitor().getUsername().equals(user.getUsername())) {
+                myPostList.add(new PostResponseDto(post));
+            } else {
+                postList.add(new PostResponseDto(post));
+            }
+        }
+        return new VisitPostDto(myPostList, postList);
     }
 
     @Transactional
@@ -40,9 +64,19 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
+    @Transactional
     public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto, User user) {
         Post post = getPost(postId);
         confirm(post, user);
+        post.update(postRequestDto);
+        return new PostResponseDto(post);
+    }
+
+    @Transactional
+    public void deletePost(Long postId, User user) {
+        Post post = getPost(postId);
+        confirm(post, user);
+        postRepository.delete(post);
     }
 
     private Post getPost(Long postId) {
@@ -52,7 +86,8 @@ public class PostService {
     }
 
     private void confirm(Post post, User user) {
-        if(post.getUser().getUsername().equals(user.getUsername()) || ){
+        if (post.getMaster().getUsername().equals(user.getUsername()) ||
+                (post.getComment() == null && post.getVisitor().equals(user.getUsername()))) {
             return;
         }
         throw new IllegalArgumentException("권한이 없습니다.");

@@ -17,7 +17,7 @@ public class PostResponseDto {
 
     public PostResponseDto(Post post) {
         this.postId = post.getId();
-        this.nickName = post.getNickname();
+        this.nickName = post.isAnonymous() ? "익명" : post.getVisitor().getNickname();
         this.content = post.getContent();
         this.createdAt = post.getCreatedAt();
         this.commentResponseDto = new CommentResponseDto(post.getComment());

@@ -15,12 +15,18 @@ public class Post extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "master_id", nullable = false)
-    private User master;
+
     @Column(nullable = false)
     private String content;
-    @ManyToOne
+
+    @Column(nullable = false)
+    private boolean anonymous;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "master_id", nullable = false)
+    private User master;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "visitor_id", nullable = false)
     private User visitor;
 
@@ -30,6 +36,11 @@ public class Post extends TimeStamped {
     public Post(User master, PostRequestDto postRequestDto, User user) {
         this.master = master;
         this.content = postRequestDto.getContent();
-        this.nickname = postRequestDto.getAnonymous() ? "익명" : user.getNickname();
+        this.visitor = user;
+        this.anonymous = postRequestDto.getAnonymous();
+    }
+
+    public void update(PostRequestDto postRequestDto) {
+        this.content = postRequestDto.getContent();
     }
 }
