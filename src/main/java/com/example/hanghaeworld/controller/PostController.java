@@ -11,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +20,9 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/post/mypost/{userId}")
-    public MyPostDto getMyPost(@PathVariable Long userId) {
-        return postService.getMyPost(userId);
+    public MyPostDto getMyPost(@PathVariable Long userId,
+                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getMyPost(userId, userDetails.getUser());
     }
 
     @GetMapping("/post/visitpost/{userId}")

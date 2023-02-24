@@ -28,10 +28,11 @@ public class User {
     @Column
     @Email
     private String email;
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+    private String image;
+    private String introduction;
 
     public User(String username, String password, String nickName, String email, UserRoleEnum role) {
         this.username = username;
