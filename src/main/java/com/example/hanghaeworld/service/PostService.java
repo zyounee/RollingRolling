@@ -145,13 +145,12 @@ public class PostService {
         return new LikesResponseDto(likes);
     }
 
-    public UserResponseDto updateProfile(Long userId, UserRequestDto userRequestDto, User user) {
-        Optional<User> pagemaster = userRepository.findById(userId);
-        if (pagemaster.getUsername().equals(user.getUsername())) {
-            return;
-        }
-        throw new IllegalArgumentException("권한이 없습니다.");
-        user.update(userRequestDto);
-        return new UserResponseDto(user);
+    public UserResponseDto updateProfile(Long masterId, UserRequestDto userRequestDto, User visitor) {
+        User master = userRepository.findById(masterId).orElseThrow(
+                () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        if (!master.getUsername().equals(visitor.getUsername()))
+        {throw new IllegalArgumentException("권한이 없습니다.");}
+        master.update(userRequestDto);
+        return new UserResponseDto(master);
     }
 }

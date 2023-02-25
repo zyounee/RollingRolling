@@ -1,6 +1,7 @@
 package com.example.hanghaeworld.entity;
 
 
+import com.example.hanghaeworld.dto.UserRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +49,7 @@ public class User {
     }
 
     public void update(UserRequestDto userRequestDto) {
-        this.image = userRequestDto.getImage;
-        this.introduction = userRequestDto.getIntroduction;
+        this.image = userRequestDto.getImage();
+        this.introduction = userRequestDto.getIntroduction();
     }
 }
