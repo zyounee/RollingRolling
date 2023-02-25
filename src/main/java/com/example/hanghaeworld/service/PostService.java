@@ -144,7 +144,7 @@ public class PostService {
         }
         return new LikesResponseDto(likes);
     }
-
+    @Transactional
     public UserResponseDto updateProfile(Long masterId, UserRequestDto userRequestDto, User visitor) {
         User master = userRepository.findById(masterId).orElseThrow(
                 () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
