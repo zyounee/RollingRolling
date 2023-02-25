@@ -24,9 +24,8 @@ public class PostResponseDto implements Comparable<PostResponseDto> {
         this.content = post.getContent();
         this.image = post.getImage();
         this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        this.commentResponseDto = new CommentResponseDto(post.getComment());
+        this.commentResponseDto = post.getComment() == null ? null : new CommentResponseDto(post.getComment());
         this.likes = post.getLikes().size();
-
     }
 
     @Override

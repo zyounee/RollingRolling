@@ -23,37 +23,37 @@ public class PostService {
     private final LikesRepository likesRepository;
 
     @Transactional(readOnly = true)
-    public MyPostDto getMyPost(Long userId, User user) {
-        List<Post> newPosts = postRepository.findByMaster_IdAndCommentNullOrderByCreatedAtAsc(userId);
+    public MyPostDto getMyPost(String username, User user) {
+        List<Post> newPosts = postRepository.findByMaster_UsernameAndCommentNullOrderByCreatedAtAsc(username);
         List<PostResponseDto> newPostList = new ArrayList<>();
         for (Post post : newPosts) {
             newPostList.add(new PostResponseDto(post));
         }
 
         Pageable pageable = getPageable(1);
-        List<Post> postList = postRepository.findByMaster_IdAndCommentNotNull(userId, pageable);
+        List<Post> postList = postRepository.findByMaster_UsernameAndCommentNotNull(username, pageable);
         Page<PostResponseDto> page = getPage(pageable, postList);
         return new MyPostDto(user, newPostList, page);
     }
 
     @Transactional(readOnly = true)
-    public VisitPostDto getVisitPost(Long userId, User user) {
-        List<Post> myPosts = postRepository.findByMaster_IdAndVisitor_IdOrderByCreatedAtDesc(userId, user.getId());
+    public VisitPostDto getVisitPost(String username, User user) {
+        List<Post> myPosts = postRepository.findByMaster_UsernameAndVisitor_IdOrderByCreatedAtDesc(username, user.getId());
         List<PostResponseDto> myPostList = new ArrayList<>();
         for (Post post : myPosts) {
             myPostList.add(new PostResponseDto(post));
         }
 
         Pageable pageable = getPageable(1);
-        List<Post> posts = postRepository.findByMaster_IdAndVisitor_IdNot(userId, user.getId(), pageable);
+        List<Post> posts = postRepository.findByMaster_UsernameAndVisitor_IdNot(username, user.getId(), pageable);
         Page<PostResponseDto> page = getPage(pageable, posts);
 
         return new VisitPostDto(user, myPostList, page);
     }
 
     @Transactional
-    public PostResponseDto writePost(Long userId, PostRequestDto postRequestDto, User user) {
-        User master = getUser(userId);
+    public PostResponseDto writePost(String username, PostRequestDto postRequestDto, User user) {
+        User master = getUser(username);
         Post post = new Post(master, postRequestDto, user);
         postRepository.save(post);
         return new PostResponseDto(post);
@@ -74,8 +74,9 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    private User getUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("없는 회원입니다."));
+    private User getUser(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("없는 회원입니다."));
     }
 
     private Post getPost(Long postId) {
@@ -105,9 +106,8 @@ public class PostService {
     }
 
 
-
     public LikeResponseDto like(LikeRequestDto likeRequestDto, Long postId, UserDetailsImpl userDetails) {
-       Post post =  postRepository.findById(postId).orElseThrow(
+        Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("없는 게시글입니다.")
         );
         Like like = (new Like(likeRequestDto, post, userDetails.getUser()));
@@ -123,12 +123,11 @@ public class PostService {
     }
 
     public LikesResponseDto likes(LikeRequestDto likeRequestDto, Long commentId, UserDetailsImpl userDetails) {
-        Comment comment =  commentRepository.findById(commentId).orElseThrow(
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("없는 게시글입니다.")
         );
         Likes likes = (new Likes(likeRequestDto, comment, userDetails.getUser()));
-        if (likeRequestDto.isLike() == true)
-        {
+        if (likeRequestDto.isLike() == true) {
             likesRepository.saveAndFlush(new Likes(likeRequestDto, comment, userDetails.getUser()));
             if (likesRepository.findByComment_IdAndUser_Id(userDetails.getUser().getId(), comment.getId()).isPresent()) {
             }
