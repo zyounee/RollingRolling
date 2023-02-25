@@ -11,6 +11,7 @@ import com.example.hanghaeworld.jwt.JwtUtil;
 import com.example.hanghaeworld.repository.PostRepository;
 import com.example.hanghaeworld.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -27,11 +28,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void signup(@Valid SignupRequestDto signupRequestDto){
         String username = signupRequestDto.getUsername();
-        String password = signupRequestDto.getPassword();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
         String nickname = signupRequestDto.getNickname();
         String email = signupRequestDto.getEmail();
 
@@ -54,7 +56,7 @@ public class UserService {
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다")
         );
 
-        if (!user.getPassword().equals(password)){
+        if (!passwordEncoder.matches(user.getPassword(),password)){
             throw new IllegalArgumentException("비밀 번호가 틀롤링");
         }
 
