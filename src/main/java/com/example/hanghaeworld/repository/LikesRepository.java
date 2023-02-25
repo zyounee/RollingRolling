@@ -1,12 +1,12 @@
 package com.example.hanghaeworld.repository;
 
-import com.example.hanghaeworld.entity.Like;
-import com.example.hanghaeworld.entity.Likes;
+
+import com.example.hanghaeworld.entity.CommentLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface LikesRepository extends JpaRepository<Likes, Long> {
-    Optional<Likes> findByComment_IdAndUser_Id(Long id, Long id1);
+public interface LikesRepository extends JpaRepository<CommentLike, Long> {
+    Optional<CommentLike> findByComment_IdAndUser_Id(Long id, Long id1);
 
 }

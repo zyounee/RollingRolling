@@ -4,7 +4,6 @@ import com.example.hanghaeworld.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter
@@ -16,7 +15,8 @@ public class PostResponseDto implements Comparable<PostResponseDto> {
     private String image;
     private String createdAt;
     private CommentResponseDto commentResponseDto;
-    private int likes;
+    private int postlike;
+
 
     public PostResponseDto(Post post) {
         this.postId = post.getId();
@@ -25,7 +25,7 @@ public class PostResponseDto implements Comparable<PostResponseDto> {
         this.image = post.getImage();
         this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.commentResponseDto = new CommentResponseDto(post.getComment());
-        this.likes = post.getLikes().size();
+        this.postlike = post.getPostLikes().size();
 
     }
 

@@ -1,15 +1,17 @@
 package com.example.hanghaeworld.dto;
 
-import com.example.hanghaeworld.entity.Likes;
+import com.example.hanghaeworld.entity.CommentLike;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class LikesResponseDto {
-    private boolean likes;
+    private Long id;
+    private boolean commentlike;
 
-    public LikesResponseDto(Likes likes){
-        this.likes = likes.isLike();
+    public LikesResponseDto(CommentLike commentLike){
+        this.id = commentLike.getId();
+        this.commentlike = commentLike.isCommentlike();
     }
 }

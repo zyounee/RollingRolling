@@ -110,32 +110,32 @@ public class PostService {
        Post post =  postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("없는 게시글입니다.")
         );
-        Like like = (new Like(likeRequestDto, post, userDetails.getUser()));
+        PostLike postLike = (new PostLike(likeRequestDto, post, userDetails.getUser()));
         if (likeRequestDto.isLike() == true) {
-            likeRepository.saveAndFlush(new Like(likeRequestDto, post, userDetails.getUser()));
+            likeRepository.saveAndFlush(new PostLike(likeRequestDto, post, userDetails.getUser()));
             if (likeRepository.findByPost_IdAndUser_Id(userDetails.getUser().getId(), post.getId()).isPresent()) {
             }
         } else {
             likeRepository.deleteById(userDetails.getUser().getId());
             return null;
         }
-        return new LikeResponseDto(like);
+        return new LikeResponseDto(postLike);
     }
 
     public LikesResponseDto likes(LikeRequestDto likeRequestDto, Long commentId, UserDetailsImpl userDetails) {
         Comment comment =  commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("없는 게시글입니다.")
         );
-        Likes likes = (new Likes(likeRequestDto, comment, userDetails.getUser()));
+        CommentLike commentLike = (new CommentLike(likeRequestDto, comment, userDetails.getUser()));
         if (likeRequestDto.isLike() == true)
         {
-            likesRepository.saveAndFlush(new Likes(likeRequestDto, comment, userDetails.getUser()));
+            likesRepository.saveAndFlush(new CommentLike(likeRequestDto, comment, userDetails.getUser()));
             if (likesRepository.findByComment_IdAndUser_Id(userDetails.getUser().getId(), comment.getId()).isPresent()) {
             }
         } else {
             likesRepository.deleteById(userDetails.getUser().getId());
             return null;
         }
-        return new LikesResponseDto(likes);
+        return new LikesResponseDto(commentLike);
     }
 }

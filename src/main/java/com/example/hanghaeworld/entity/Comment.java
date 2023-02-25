@@ -28,10 +28,12 @@ public class Comment extends TimeStamped {
     private User user;
 
     @OneToMany(mappedBy = "comment")
-    private List<Likes> likes = new ArrayList<>();
+    private List<CommentLike> commentLikes = new ArrayList<>();
 
-    public Comment(CommentRequestDto commentRequestDto,Post post){
+    public Comment(CommentRequestDto commentRequestDto,Post post,User user){
         this.content = commentRequestDto.getContent();
         this.post = post;
+        this.user = user;
     }
 }
+// 생성자 문제 넣기

@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity(name = "liked")
+@Entity(name = "postlike")
 
 @NoArgsConstructor
 @Getter
-public class Like {
+public class PostLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private boolean like;
+    private boolean postlike;
 
     @ManyToOne
     @JoinColumn
@@ -27,9 +27,9 @@ public class Like {
     private User user;
 
 
-    public Like(LikeRequestDto likeRequestDto, Post post, User user){
+    public PostLike(LikeRequestDto likeRequestDto, Post post, User user){
         this.post = post;
-        this.like = likeRequestDto.isLike();
+        this.postlike = likeRequestDto.isLike();
         this.user = user;
     }
 }
