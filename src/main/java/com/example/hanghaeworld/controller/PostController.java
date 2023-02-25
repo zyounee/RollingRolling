@@ -50,4 +50,11 @@ public class PostController {
         postService.deletePost(postId, userDetails.getUser());
     }
 
+    @PutMapping("/api/profile/{id}")
+    public UserResponseDto updateProfile(@PathVariable Long userId,
+                                      @Valid @RequestBody UserRequestDto userRequestDto,
+                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.updateProfile(userId, userRequestDto, userDetails.getUser());
+    }
+
 }

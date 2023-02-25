@@ -1,9 +1,6 @@
 package com.example.hanghaeworld.service;
 
-import com.example.hanghaeworld.dto.MyPostDto;
-import com.example.hanghaeworld.dto.PostRequestDto;
-import com.example.hanghaeworld.dto.PostResponseDto;
-import com.example.hanghaeworld.dto.VisitPostDto;
+import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.entity.Post;
 import com.example.hanghaeworld.entity.User;
 import com.example.hanghaeworld.repository.PostRepository;
@@ -14,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -91,5 +89,15 @@ public class PostService {
             return;
         }
         throw new IllegalArgumentException("권한이 없습니다.");
+    }
+
+    public UserResponseDto updateProfile(Long userId, UserRequestDto userRequestDto, User user) {
+        Optional<User> pagemaster = userRepository.findById(userId);
+        if (pagemaster.getUsername().equals(user.getUsername())) {
+            return;
+        }
+        throw new IllegalArgumentException("권한이 없습니다.");
+        user.update(userRequestDto);
+        return new UserResponseDto(user);
     }
 }

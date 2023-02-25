@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity(name = "users")
 @Getter
@@ -29,6 +30,12 @@ public class User {
     @Email
     private String email;
 
+    @Column
+    private String image;
+
+    @Column
+    private String introduction;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
@@ -39,5 +46,10 @@ public class User {
         this.nickname = nickName;
         this.email = email;
         this.role = role;
+    }
+
+    public void update(UserRequestDto userRequestDto) {
+        this.image = userRequestDto.getImage;
+        this.introduction = userRequestDto.getIntroduction;
     }
 }
