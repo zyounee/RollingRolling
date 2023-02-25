@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -41,14 +42,15 @@ public class WebSecurityConfig {
         // CSRF 설정
         http.csrf().disable();
 
-        http.authorizeRequests().antMatchers("/api/user/**").permitAll()
+        http.authorizeRequests()
+                .antMatchers("/api/user/signup").permitAll()
+                .antMatchers("/api/user/login").permitAll()
                 .antMatchers("/api").permitAll()
                 .antMatchers().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // 특정 게시글 조회, 삭제, 수정 : "api/memos/{id}"
         // 게시글 전체 조회, 작성 : "/api/memos"
-
 
         http.authorizeRequests().anyRequest().authenticated();
 
