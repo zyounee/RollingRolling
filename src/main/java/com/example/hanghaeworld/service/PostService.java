@@ -4,6 +4,11 @@ import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.entity.*;
 import com.example.hanghaeworld.repository.*;
 import com.example.hanghaeworld.security.UserDetailsImpl;
+import com.example.hanghaeworld.dto.*;
+import com.example.hanghaeworld.entity.Post;
+import com.example.hanghaeworld.entity.User;
+import com.example.hanghaeworld.repository.PostRepository;
+import com.example.hanghaeworld.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -11,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -137,5 +143,14 @@ public class PostService {
             return null;
         }
         return new LikesResponseDto(commentLike);
+    }
+
+    public UserResponseDto updateProfile(Long masterId, UserRequestDto userRequestDto, User visitor) {
+        User master = userRepository.findById(masterId).orElseThrow(
+                () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        if (!master.getUsername().equals(visitor.getUsername()))
+        {throw new IllegalArgumentException("권한이 없습니다.");}
+        master.update(userRequestDto);
+        return new UserResponseDto(master);
     }
 }

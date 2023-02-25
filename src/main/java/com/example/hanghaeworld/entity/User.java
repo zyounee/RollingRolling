@@ -1,6 +1,7 @@
 package com.example.hanghaeworld.entity;
 
 
+import com.example.hanghaeworld.dto.UserRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,11 +29,16 @@ public class User {
     @Column
     @Email
     private String email;
+
+    @Column
+    private String image;
+
+    @Column
+    private String introduction;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
-    private String image;
-    private String introduction;
 
     public User(String username, String password, String nickName, String email, UserRoleEnum role) {
         this.username = username;
@@ -40,5 +46,10 @@ public class User {
         this.nickname = nickName;
         this.email = email;
         this.role = role;
+    }
+
+    public void update(UserRequestDto userRequestDto) {
+        this.image = userRequestDto.getImage();
+        this.introduction = userRequestDto.getIntroduction();
     }
 }

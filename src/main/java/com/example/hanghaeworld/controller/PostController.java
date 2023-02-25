@@ -1,5 +1,4 @@
 package com.example.hanghaeworld.controller;
-
 import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.PostService;
@@ -47,6 +46,13 @@ public class PostController {
     public void deletePost(@PathVariable Long postId,
                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.deletePost(postId, userDetails.getUser());
+    }
+
+    @PutMapping("/api/profile/{userId}")
+    public UserResponseDto updateProfile(@PathVariable Long userId,
+                                      @Valid @RequestBody UserRequestDto userRequestDto,
+                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.updateProfile(userId, userRequestDto, userDetails.getUser());
     }
 
     @PostMapping("/like/{postId}")
