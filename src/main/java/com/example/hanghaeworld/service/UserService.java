@@ -8,6 +8,9 @@ import com.example.hanghaeworld.jwt.JwtUtil;
 import com.example.hanghaeworld.repository.PostRepository;
 import com.example.hanghaeworld.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+//import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,8 +67,10 @@ public class UserService {
 
     //전체 회원 조회
     @Transactional
-    public List<UserResponseDto> getUsers(){
-        List<User> users = userRepository.findAll();
+    public List<UserResponseDto> getUsers(int page){
+        //Sort sort = Sort.by(Sort.Direction.ASC, "nickname");
+        Pageable pageable = PageRequest.of(page - 1,3);
+        List<User> users = userRepository.findAllByOrderByNicknameAsc(pageable);
         List<UserResponseDto> userResponseDtos = users.stream()
                 .map(user-> new UserResponseDto(user))
                 .collect(Collectors.toList());
