@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity(name = "users")
 @Getter
@@ -18,10 +19,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, unique = true)
-    @Pattern(regexp = "^[a-z\\d`]{4,10}$")
     private String username;
     @Column(nullable = false)
-    @Pattern(regexp = "^[a-zA-Z\\d`~!@#$%^&*()-_=+]{8,15}$")
     private String password;
     @Column(nullable = false)
     private String nickname;
