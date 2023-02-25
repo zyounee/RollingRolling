@@ -1,26 +1,26 @@
 package com.example.hanghaeworld.controller;
 
-import com.example.hanghaeworld.dto.LoginRequestDto;
-import com.example.hanghaeworld.dto.SignupRequestDto;
-import com.example.hanghaeworld.dto.UserSearchRequestDto;
-import com.example.hanghaeworld.dto.UserSearchResponseDto;
+import com.example.hanghaeworld.dto.*;
+import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
 
 
-    @PostMapping("/signup")
+    @PostMapping("/user/signup")
     public ModelAndView signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
         ModelAndView modelAndView = new ModelAndView();
@@ -29,15 +29,22 @@ public class UserController {
     }
 
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public void login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
         userService.login(loginRequestDto, response);
     }
 
-    @GetMapping("/search")
+    //전체 회원 조회
+    @GetMapping("/{page}")
+    public List<UserResponseDto> getUsers(@PathVariable int page){
+        return userService.getUsers(page);
+    }
+
+
+    //특정 회원 검색 조회
+    @GetMapping("/user/search")
     public UserSearchResponseDto search(@RequestBody UserSearchRequestDto userSearchRequestDto){
         return userService.search(userSearchRequestDto);
     }
-
 
 }
