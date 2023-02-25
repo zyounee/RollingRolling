@@ -6,7 +6,6 @@ import com.example.hanghaeworld.dto.UserSearchRequestDto;
 import com.example.hanghaeworld.dto.UserSearchResponseDto;
 import com.example.hanghaeworld.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 

@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findByMaster_IdAndCommentNullOrderByCreatedAtAsc(Long id);
-    List<Post> findByMaster_IdAndCommentNotNull(Long id, Pageable pageable);
+    List<Post> findByMaster_UsernameAndCommentNullOrderByCreatedAtAsc(String username);
+    List<Post> findByMaster_UsernameAndCommentNotNull(String username, Pageable pageable);
 
-    List<Post> findByMaster_IdAndVisitor_IdOrderByCreatedAtDesc(Long masterId, Long visitorId);
-    List<Post> findByMaster_IdAndVisitor_IdNot(Long masterId, Long visitorId, Pageable pageable);
+    List<Post> findByMaster_UsernameAndVisitor_IdOrderByCreatedAtDesc(String username, Long visitorId);
+    List<Post> findByMaster_UsernameAndVisitor_IdNot(String username, Long visitorId, Pageable pageable);
 
+    List<Post> findAllByMasterId(Long id);
 }

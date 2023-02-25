@@ -1,6 +1,5 @@
 package com.example.hanghaeworld.dto;
 
-import com.example.hanghaeworld.entity.Post;
 import com.example.hanghaeworld.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

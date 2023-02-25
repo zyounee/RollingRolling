@@ -16,23 +16,23 @@ public class PostController {
     private final PostService postService;
 
 
-    @GetMapping("/post/mypost/{userId}")
-    public MyPostDto getMyPost(@PathVariable Long userId,
+    @GetMapping("/post/mypost/{username}")
+    public MyPostDto getMyPost(@PathVariable String username,
                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.getMyPost(userId, userDetails.getUser());
+        return postService.getMyPost(username, userDetails.getUser());
     }
 
-    @GetMapping("/post/visitpost/{userId}")
-    public VisitPostDto getVisitPost(@PathVariable Long userId,
+    @GetMapping("/post/visitpost/{username}")
+    public VisitPostDto getVisitPost(@PathVariable String username,
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.getVisitPost(userId, userDetails.getUser());
+        return postService.getVisitPost(username, userDetails.getUser());
     }
 
-    @PostMapping("/post/{userId}")
-    public PostResponseDto writePost(@PathVariable Long userId,
+    @PostMapping("/post/{username}")
+    public PostResponseDto writePost(@PathVariable String username,
                                      @Valid @RequestBody PostRequestDto postRequestDto,
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.writePost(userId, postRequestDto, userDetails.getUser());
+        return postService.writePost(username, postRequestDto, userDetails.getUser());
     }
 
     @PutMapping("/post/{postId}")
