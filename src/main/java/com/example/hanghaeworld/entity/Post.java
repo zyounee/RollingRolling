@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +24,8 @@ public class Post extends TimeStamped {
     @Column(nullable = false)
     private boolean anonymous;
 
+    private String image;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "master_id", nullable = false)
     private User master;
@@ -33,9 +37,13 @@ public class Post extends TimeStamped {
     @OneToOne(mappedBy = "post")
     private Comment comment;
 
+    @OneToMany(mappedBy = "post")
+    private List<Like> likes = new ArrayList<>();
+
     public Post(User master, PostRequestDto postRequestDto, User user) {
         this.master = master;
         this.content = postRequestDto.getContent();
+        this.image = postRequestDto.getImage();
         this.visitor = user;
         this.anonymous = postRequestDto.getAnonymous();
     }

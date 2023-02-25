@@ -1,9 +1,5 @@
 package com.example.hanghaeworld.controller;
-
-import com.example.hanghaeworld.dto.MyPostDto;
-import com.example.hanghaeworld.dto.PostRequestDto;
-import com.example.hanghaeworld.dto.PostResponseDto;
-import com.example.hanghaeworld.dto.VisitPostDto;
+import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +15,11 @@ public class PostController {
 
     private final PostService postService;
 
+
     @GetMapping("/post/mypost/{userId}")
-    public MyPostDto getMyPost(@PathVariable Long userId) {
-        return postService.getMyPost(userId);
+    public MyPostDto getMyPost(@PathVariable Long userId,
+                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getMyPost(userId, userDetails.getUser());
     }
 
     @GetMapping("/post/visitpost/{userId}")
@@ -57,4 +55,13 @@ public class PostController {
         return postService.updateProfile(userId, userRequestDto, userDetails.getUser());
     }
 
+    @PostMapping("/like/{postId}")
+    public LikeResponseDto like(@RequestBody LikeRequestDto likeRequestDto, @PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.like(likeRequestDto, postId, userDetails);
+    }
+
+    @PostMapping("/like/{commentId}")
+    public LikesResponseDto likes(@RequestBody LikeRequestDto likeRequestDto, @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.likes(likeRequestDto, commentId, userDetails);
+    }
 }

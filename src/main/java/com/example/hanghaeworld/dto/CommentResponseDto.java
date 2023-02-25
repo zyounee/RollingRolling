@@ -4,7 +4,7 @@ import com.example.hanghaeworld.entity.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @NoArgsConstructor
@@ -12,12 +12,14 @@ public class CommentResponseDto {
     private Long commentId;
     private String content;
     private String nickName;
-    private LocalDateTime createdAt;
+    private String createdAt;
+    private int likes;
 
     public CommentResponseDto(Comment comment){
         this.commentId = comment.getId();
         this.content = comment.getContent();
         this.nickName = comment.getUser().getNickname();
-        this.createdAt = comment.getCreatedAt();
+        this.createdAt = comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.likes = comment.getLikes().size();
     }
 }

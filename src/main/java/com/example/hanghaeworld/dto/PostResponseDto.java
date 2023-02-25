@@ -5,21 +5,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @NoArgsConstructor
-public class PostResponseDto {
+public class PostResponseDto implements Comparable<PostResponseDto> {
     private Long postId;
     private String nickName;
     private String content;
-    private LocalDateTime createdAt;
+    private String image;
+    private String createdAt;
     private CommentResponseDto commentResponseDto;
+    private int likes;
 
     public PostResponseDto(Post post) {
         this.postId = post.getId();
         this.nickName = post.isAnonymous() ? "익명" : post.getVisitor().getNickname();
         this.content = post.getContent();
-        this.createdAt = post.getCreatedAt();
+        this.image = post.getImage();
+        this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.commentResponseDto = new CommentResponseDto(post.getComment());
+        this.likes = post.getLikes().size();
+
+    }
+
+    @Override
+    public int compareTo(PostResponseDto o) {
+        return o.createdAt.compareTo(this.createdAt);
     }
 }

@@ -11,4 +11,5 @@ public class PostRequestDto {
     @NotNull
     private String content;
     private Boolean anonymous;
+    private String image;
 }
