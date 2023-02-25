@@ -23,7 +23,7 @@ public class CommentService {
                 () -> new IllegalArgumentException("질문이 없습니다")
         );
         if (Objects.equals(post.getMaster().getUsername(), userDetails.getUsername())){
-            Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto,post));
+            Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto,post,userDetails.getUser()));
             return new CommentResponseDto(comment);
         }else{
             throw new IllegalArgumentException("마스터가 아닙니다");

@@ -14,7 +14,8 @@ public class PostResponseDto {
     private String content;
     private LocalDateTime createdAt;
     private CommentResponseDto commentResponseDto;
-    private int likes;
+    private int postlike;
+
 
     public PostResponseDto(Post post) {
         this.postId = post.getId();
@@ -22,7 +23,10 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.createdAt = post.getCreatedAt();
         this.commentResponseDto = new CommentResponseDto(post.getComment());
-        this.likes = post.getLikes().size();
+        this.postlike = post.getPostLikes().size();
 
     }
 }
+
+// postlike
+// commentlike

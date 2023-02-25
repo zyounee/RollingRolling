@@ -36,7 +36,7 @@ public class Post extends TimeStamped {
     private Comment comment;
 
     @OneToMany(mappedBy = "post")
-    private List<Like> likes = new ArrayList<>();
+    private List<PostLike> postLikes = new ArrayList<>();
 
     public Post(User master, PostRequestDto postRequestDto, User user) {
         this.master = master;
