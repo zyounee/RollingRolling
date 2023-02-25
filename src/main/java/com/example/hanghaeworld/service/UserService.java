@@ -56,7 +56,7 @@ public class UserService {
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다")
         );
 
-        if (!passwordEncoder.matches(user.getPassword(),password)){
+        if (!passwordEncoder.matches(password, user.getPassword())){
             throw new IllegalArgumentException("비밀 번호가 틀롤링");
         }
 
