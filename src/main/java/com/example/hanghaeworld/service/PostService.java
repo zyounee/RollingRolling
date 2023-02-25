@@ -4,7 +4,6 @@ import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.entity.*;
 import com.example.hanghaeworld.repository.*;
 import com.example.hanghaeworld.security.UserDetailsImpl;
-import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.entity.Post;
 import com.example.hanghaeworld.entity.User;
 import com.example.hanghaeworld.repository.PostRepository;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

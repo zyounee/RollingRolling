@@ -13,5 +13,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByMaster_UsernameAndVisitor_IdOrderByCreatedAtDesc(String username, Long visitorId);
     List<Post> findByMaster_UsernameAndVisitor_IdNot(String username, Long visitorId, Pageable pageable);
 
+
     List<Post> findAllByMasterId(Long id);
 }
