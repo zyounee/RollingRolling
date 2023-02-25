@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -45,7 +44,6 @@ public class WebSecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/api/user/signup").permitAll()
                 .antMatchers("/api/user/login").permitAll()
-                .antMatchers("/api").permitAll()
                 .antMatchers().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
@@ -53,6 +51,9 @@ public class WebSecurityConfig {
         // 게시글 전체 조회, 작성 : "/api/memos"
 
         http.authorizeRequests().anyRequest().authenticated();
+
+        // 이 설정을 해주지 않으면 밑의 corsConfigurationSource가 적용되지 않습니다!
+        http.cors();
 
         // 로그인 사용
         http.formLogin();
@@ -74,7 +75,7 @@ public class WebSecurityConfig {
 
         // 특정 헤더를 클라이언트 측에서 사용할 수 있게 지정
         // 만약 지정하지 않는다면, Authorization 헤더 내의 토큰 값을 사용할 수 없음
-        config.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
+        config.addExposedHeader(jwtUtil.AUTHORIZATION_HEADER);
 
         // 본 요청에 허용할 HTTP method(예비 요청에 대한 응답 헤더에 추가됨)
         config.addAllowedMethod("*");
