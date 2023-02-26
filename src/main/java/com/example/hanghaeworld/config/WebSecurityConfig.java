@@ -42,8 +42,9 @@ public class WebSecurityConfig {
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/api/user/signup").permitAll()
-                .antMatchers("/api/user/login").permitAll()
+//                .antMatchers("/api/user/signup").permitAll()
+//                .antMatchers("/api/user/login").permitAll()
+                .antMatchers("**").permitAll()
                 .antMatchers().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
@@ -54,9 +55,6 @@ public class WebSecurityConfig {
 
         // 이 설정을 해주지 않으면 밑의 corsConfigurationSource가 적용되지 않습니다!
         http.cors();
-
-        // 로그인 사용
-        http.formLogin();
 
         return http.build();
     }
@@ -71,6 +69,7 @@ public class WebSecurityConfig {
 
         // 사전에 약속된 출처를 명시
         config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://localhost:3001");
         //config.addAllowedOrigin("http://charleybucket.s3-website.ap-northeast-2.amazonaws.com");
 
         // 특정 헤더를 클라이언트 측에서 사용할 수 있게 지정

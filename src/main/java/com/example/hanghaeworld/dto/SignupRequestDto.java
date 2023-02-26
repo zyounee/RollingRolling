@@ -2,6 +2,7 @@ package com.example.hanghaeworld.dto;
 
 import lombok.Getter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
 @Getter
@@ -10,6 +11,7 @@ public class SignupRequestDto {
     private String username;
     @Pattern(regexp = "(?=.*?[a-zA-Z])(?=.*?[\\d])(?=.*?[~!@#$%^&*()_+=\\-`]).{8,15}")
     private String password;
+    @Email
     private String email;
     private String nickname;
 }

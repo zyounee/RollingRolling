@@ -26,33 +26,41 @@ public class PostService {
     private final LikeRepository likeRepository;
     private final LikesRepository likesRepository;
 
-    @Transactional(readOnly = true)
-    public MyPostDto getMyPost(String username, User user) {
-        List<Post> newPosts = postRepository.findByMaster_UsernameAndCommentNullOrderByCreatedAtAsc(username);
-        List<PostResponseDto> newPostList = new ArrayList<>();
-        for (Post post : newPosts) {
-            newPostList.add(new PostResponseDto(post));
-        }
 
-        Pageable pageable = getPageable(1);
-        List<Post> postList = postRepository.findByMaster_UsernameAndCommentNotNull(username, pageable);
-        Page<PostResponseDto> page = getPage(pageable, postList);
-        return new MyPostDto(user, newPostList, page);
+    @Transactional(readOnly = true)
+    public BoardDto getMyPost(String username) {
+        User master = getUser(username);
+        List<Post> newPosts = postRepository.findByMaster_UsernameAndCommentNullOrderByCreatedAtAsc(username);
+        List<PostResponseDto> newPostList = postListToDto(newPosts);
+
+        Page<PostResponseDto> page = getMyPage(username, 1);
+        return new BoardDto(true, master, newPostList, page);
     }
 
     @Transactional(readOnly = true)
-    public VisitPostDto getVisitPost(String username, User user) {
-        List<Post> myPosts = postRepository.findByMaster_UsernameAndVisitor_IdOrderByCreatedAtDesc(username, user.getId());
-        List<PostResponseDto> myPostList = new ArrayList<>();
-        for (Post post : myPosts) {
-            myPostList.add(new PostResponseDto(post));
-        }
+    public Page<PostResponseDto> getMyPage(String username, int pageNum) {
+        Pageable pageable = getPageable(pageNum);
+        List<Post> posts = postRepository.findByMaster_UsernameAndCommentNotNull(username, pageable);
+        List<PostResponseDto> postDtoList = postListToDto(posts);
+        return new PageImpl<>(postDtoList, pageable, postDtoList.size());
+    }
 
-        Pageable pageable = getPageable(1);
-        List<Post> posts = postRepository.findByMaster_UsernameAndVisitor_IdNot(username, user.getId(), pageable);
-        Page<PostResponseDto> page = getPage(pageable, posts);
+    @Transactional(readOnly = true)
+    public BoardDto getVisitPost(String username, User visitor) {
+        User master = getUser(username);
+        List<Post> myPosts = postRepository.findByMaster_UsernameAndVisitor_IdOrderByCreatedAtDesc(username, visitor.getId());
+        List<PostResponseDto> myPostList = postListToDto(myPosts);
 
-        return new VisitPostDto(user, myPostList, page);
+        Page<PostResponseDto> page = getVisitPage(username, 1, visitor);
+        return new BoardDto(false, master, myPostList, page);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto> getVisitPage(String username, int pageNum, User visitor) {
+        Pageable pageable = getPageable(pageNum);
+        List<Post> posts = postRepository.findByMaster_UsernameAndVisitor_IdNot(username, visitor.getId(), pageable);
+        List<PostResponseDto> postDtoList = postListToDto(posts);
+        return new PageImpl<>(postDtoList, pageable, postDtoList.size());
     }
 
     @Transactional
@@ -66,7 +74,7 @@ public class PostService {
     @Transactional
     public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto, User user) {
         Post post = getPost(postId);
-        if(!confirmVisitor(post, user)){
+        if (!confirmVisitor(post, user)) {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
         post.update(postRequestDto);
@@ -76,7 +84,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId, User user) {
         Post post = getPost(postId);
-        if(!confirmMaster(post, user) && !confirmVisitor(post, user)){
+        if (!confirmMaster(post, user) && !confirmVisitor(post, user)) {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
         postRepository.delete(post);
@@ -97,12 +105,12 @@ public class PostService {
         return pageable;
     }
 
-    private Page<PostResponseDto> getPage(Pageable pageable, List<Post> posts) {
-        List<PostResponseDto> postList = new ArrayList<>();
-        for (Post post : posts) {
-            postList.add(new PostResponseDto(post));
+    private List<PostResponseDto> postListToDto(List<Post> newPosts) {
+        List<PostResponseDto> newPostList = new ArrayList<>();
+        for (Post post : newPosts) {
+            newPostList.add(new PostResponseDto(post));
         }
-        return new PageImpl<>(postList, pageable, postList.size());
+        return newPostList;
     }
 
     private boolean confirmVisitor(Post post, User user) {
