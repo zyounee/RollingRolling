@@ -3,10 +3,13 @@ package com.example.hanghaeworld.service;
 import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.entity.Post;
 import com.example.hanghaeworld.entity.User;
+import com.example.hanghaeworld.entity.UserLike;
 import com.example.hanghaeworld.entity.UserRoleEnum;
 import com.example.hanghaeworld.jwt.JwtUtil;
 import com.example.hanghaeworld.repository.PostRepository;
+import com.example.hanghaeworld.repository.UserLikeRepository;
 import com.example.hanghaeworld.repository.UserRepository;
+import com.example.hanghaeworld.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +34,7 @@ public class UserService {
     private final PostRepository postRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final UserLikeRepository userLikeRepository;
 
     @Transactional
     public void signup(@Valid SignupRequestDto signupRequestDto){
@@ -107,4 +111,22 @@ public class UserService {
         return new UserSearchResponseDto(user, newPostCnt, comPostCnt);
     }
 
+    public UserResponseDto likeUser(Long likedUserid, UserDetailsImpl userDetails) {
+        User likedUser = userRepository.findById(likedUserid).orElseThrow(
+                () -> new NullPointerException("해당 유저가 없습니다.")
+        );
+        User likesUser = userDetails.getUser();
+
+        Optional<UserLike> optionalUserLike = userLikeRepository.findByLikedUserAndLikesUser(likedUser, likesUser);
+        if (optionalUserLike.isPresent()){
+            userLikeRepository.deleteById(optionalUserLike.get().getId());
+            likedUser.setLikeCnt(likedUser.getLikeCnt()-1);
+            userRepository.save(likedUser);
+            return new UserResponseDto(likedUser);
+        }
+        userLikeRepository.save(new UserLike(likedUser, likesUser));
+        likedUser.setLikeCnt(likedUser.getLikeCnt()+1);
+        userRepository.save(likedUser);
+        return new UserResponseDto(likedUser);
+    }
 }
