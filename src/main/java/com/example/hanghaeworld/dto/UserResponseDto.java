@@ -11,11 +11,13 @@ public class UserResponseDto {
     private String nickname;
     private String image;
     private String introduction;
+    private int likeCnt;
 
     public UserResponseDto(User user){
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.image = user.getImage();
         this.introduction = user.getIntroduction();
+        this.likeCnt = user.getLikeCnt();
     }
 }

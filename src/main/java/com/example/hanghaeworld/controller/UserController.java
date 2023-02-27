@@ -47,4 +47,9 @@ public class UserController {
         return userService.search(userSearchRequestDto);
     }
 
+    @PostMapping("user/like/{likedUserid}")
+    public UserResponseDto likeUser(@PathVariable Long likedUserid, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.likeUser(likedUserid, userDetails);
+    }
+
 }
