@@ -10,11 +10,13 @@ import com.example.hanghaeworld.repository.PostRepository;
 import com.example.hanghaeworld.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final LikesRepository likesRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional(readOnly = true)
@@ -168,7 +171,16 @@ public class PostService {
         if (!master.getUsername().equals(visitor.getUsername())) {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
-        master.update(userRequestDto);
+        if (!passwordEncoder.matches(userRequestDto.getCurrentPassword(), master.getPassword())){
+            throw new IllegalArgumentException("비밀 번호가 틀롤링");
+        }
+        if (!userRequestDto.getNewPassword().isEmpty() && userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())){
+            master.updatePassword(passwordEncoder.encode(userRequestDto.getNewPassword()));
+        }
+        else if (!userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())) {
+            throw new IllegalArgumentException("변경하려는 비밀 번호가 틀롤링");
+        }
+            master.update(userRequestDto);
         return new UserResponseDto(master);
     }
 }
