@@ -69,7 +69,7 @@ public class UserService {
     @Transactional
     public List<UserResponseDto> getUsers(int page){
         //Sort sort = Sort.by(Sort.Direction.ASC, "nickname");
-        Pageable pageable = PageRequest.of(page - 1,3);
+        Pageable pageable = PageRequest.of(page - 1,30);
         List<User> users = userRepository.findAllByOrderByNicknameAsc(pageable);
         List<UserResponseDto> userResponseDtos = users.stream()
                 .map(user-> new UserResponseDto(user))

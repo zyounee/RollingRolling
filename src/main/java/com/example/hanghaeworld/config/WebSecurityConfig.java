@@ -42,9 +42,9 @@ public class WebSecurityConfig {
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/api/user/signup").permitAll()
-                .antMatchers("/api/user/login").permitAll()
-                .antMatchers().authenticated()
+//                .antMatchers("/api/user/signup").permitAll()
+//                .antMatchers("/api/user/login").permitAll()
+                .antMatchers("**").permitAll()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // 특정 게시글 조회, 삭제, 수정 : "api/memos/{id}"
@@ -56,7 +56,7 @@ public class WebSecurityConfig {
         http.cors();
 
         // 로그인 사용
-        http.formLogin();
+        //http.formLogin();
 
         return http.build();
     }
