@@ -54,7 +54,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public void login(LoginRequestDto loginRequestDto, HttpServletResponse response){
+    public User login(LoginRequestDto loginRequestDto, HttpServletResponse response){
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
 
@@ -67,6 +67,7 @@ public class UserService {
         }
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+        return user;
     }
 
     //전체 회원 조회
