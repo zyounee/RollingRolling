@@ -26,7 +26,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-    private final PasswordEncoder passwordEncoder;
     private final PostLikeRepository postLikeRepository;
 
 
