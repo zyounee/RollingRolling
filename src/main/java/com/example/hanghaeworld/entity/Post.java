@@ -34,10 +34,10 @@ public class Post extends TimeStamped {
     @JoinColumn(name = "visitor_id", nullable = false)
     private User visitor;
 
-    @OneToOne(mappedBy = "post")
+    @OneToOne(mappedBy = "post",cascade = CascadeType.REMOVE)
     private Comment comment;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
     private List<PostLike> postLikes = new ArrayList<>();
 
     public Post(User master, PostRequestDto postRequestDto, User user) {

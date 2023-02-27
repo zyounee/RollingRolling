@@ -70,14 +70,8 @@ public class PostController {
 
     //todo 뭔가 void로 해도 될것 같아요. 프론트에서는 클릭하면 무조건 하트 색깔 전환 되고, 데이터는 저희가 알아서 처리하는 방식? 한번 논의를 해봐요
     @PostMapping("/post/like/{postId}")
-    public LikeResponseDto like(@RequestBody LikeRequestDto likeRequestDto, @PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.like(likeRequestDto, postId, userDetails);
-    }
-
-    //todo 이것도 CommentController로, 이것도 void로
-    @PostMapping("/comment/like/{commentId}")
-    public LikesResponseDto likes(@RequestBody LikeRequestDto likeRequestDto, @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.likes(likeRequestDto, commentId, userDetails);
+    public void like( @PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.like(postId, userDetails);
     }
 
     @PostMapping("/upload")
