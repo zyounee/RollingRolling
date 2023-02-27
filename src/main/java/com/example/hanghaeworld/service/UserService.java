@@ -1,9 +1,6 @@
 package com.example.hanghaeworld.service;
 
-import com.example.hanghaeworld.dto.LoginRequestDto;
-import com.example.hanghaeworld.dto.SignupRequestDto;
-import com.example.hanghaeworld.dto.UserSearchRequestDto;
-import com.example.hanghaeworld.dto.UserSearchResponseDto;
+import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.entity.Post;
 import com.example.hanghaeworld.entity.User;
 import com.example.hanghaeworld.entity.UserRoleEnum;
@@ -11,6 +8,9 @@ import com.example.hanghaeworld.jwt.JwtUtil;
 import com.example.hanghaeworld.repository.PostRepository;
 import com.example.hanghaeworld.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +18,10 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+//import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -63,6 +65,18 @@ public class UserService {
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
     }
 
+    //전체 회원 조회
+    @Transactional
+    public List<UserResponseDto> getUsers(int page){
+        //Sort sort = Sort.by(Sort.Direction.ASC, "nickname");
+        Pageable pageable = PageRequest.of(page - 1,3);
+        List<User> users = userRepository.findAllByOrderByNicknameAsc(pageable);
+        List<UserResponseDto> userResponseDtos = users.stream()
+                .map(user-> new UserResponseDto(user))
+                .collect(Collectors.toList());
+        return userResponseDtos;
+    }
+
     @Transactional
     public UserSearchResponseDto search(UserSearchRequestDto userSearchRequestDto){
         User user = null;
@@ -77,9 +91,7 @@ public class UserService {
                     () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
             );
         }
-
         // 이 유저의 id를 ? master_id로 가진 post id를 알아내
-
         List<Post> posts = postRepository.findAllByMasterId(user.getId());
         int newPostCnt = 0;
         int comPostCnt = posts.size();
@@ -92,9 +104,7 @@ public class UserService {
             }
         }
         comPostCnt -= newPostCnt;
-
         return new UserSearchResponseDto(user, newPostCnt, comPostCnt);
-
     }
 
 }
