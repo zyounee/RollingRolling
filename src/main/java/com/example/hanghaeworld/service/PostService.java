@@ -29,7 +29,6 @@ public class PostService {
     private final LikesRepository likesRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     @Transactional(readOnly = true)
     public BoardDto getMyPost(String username) {
         User master = getUser(username);

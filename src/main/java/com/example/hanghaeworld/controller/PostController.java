@@ -40,12 +40,6 @@ public class PostController {
         return postService.getVisitPage(username, pageNum, userDetails.getUser());
     }
 
-//    @GetMapping("/post/visitpost/{username}")
-//    public VisitPostDto getVisitPost(@PathVariable String username,
-//                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return postService.getVisitPost(username, userDetails.getUser());
-//    }
-
     @PostMapping("/post/{username}")
     public PostResponseDto writePost(@PathVariable String username,
                                      @Valid @RequestBody PostRequestDto postRequestDto,
