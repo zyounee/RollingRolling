@@ -35,7 +35,7 @@ public class UserController {
     }
 
     //전체 회원 조회
-    @GetMapping("/{page}")
+    @GetMapping("/home/{page}")
     public List<UserResponseDto> getUsers(@PathVariable int page){
         return userService.getUsers(page);
     }

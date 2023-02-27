@@ -56,6 +56,9 @@ public class WebSecurityConfig {
         // 이 설정을 해주지 않으면 밑의 corsConfigurationSource가 적용되지 않습니다!
         http.cors();
 
+        // 로그인 사용
+        //http.formLogin();
+
         return http.build();
     }
 
