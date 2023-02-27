@@ -107,4 +107,11 @@ public class UserService {
         return new UserSearchResponseDto(user, newPostCnt, comPostCnt);
     }
 
+    @Transactional
+    public UserResponseDto getMyProfile(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        );
+        return new UserResponseDto(user);
+    }
 }
