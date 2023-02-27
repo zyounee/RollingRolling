@@ -11,8 +11,6 @@ import javax.validation.constraints.Pattern;
 public class UserRequestDto {
     private String image;
     private String introduction;
-    @NotNull
-    private String currentPassword;
     @Pattern(regexp = "(?=.*?[a-zA-Z])(?=.*?[\\d])(?=.*?[~!@#$%^&*()_+=\\-`]).{8,15}")
     private String newPassword;
     private String newPasswordConfirm;
