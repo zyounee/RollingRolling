@@ -2,8 +2,10 @@ package com.example.hanghaeworld.controller;
 
 import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.entity.User;
+import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -51,6 +53,13 @@ public class UserController {
     @GetMapping("/user/search")
     public UserSearchResponseDto search(@RequestBody UserSearchRequestDto userSearchRequestDto){
         return userService.search(userSearchRequestDto);
+    }
+
+    //내 정보 변경
+    @PutMapping("/mypage")
+    public UserResponseDto updateProfile(@RequestBody UserRequestDto userRequestDto,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.updateProfile(userRequestDto, userDetails.getUser());
     }
 
     @PostMapping("user/like/{likedUserid}")

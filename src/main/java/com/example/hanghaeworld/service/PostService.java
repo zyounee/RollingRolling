@@ -25,7 +25,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
 
 
@@ -143,24 +143,4 @@ public class PostService {
         }
     }
 
-
-    @Transactional
-    public UserResponseDto updateProfile(Long masterId, UserRequestDto userRequestDto, User visitor) {
-        User master = userRepository.findById(masterId).orElseThrow(
-                () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-        if (!master.getUsername().equals(visitor.getUsername())) {
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
-        if (!passwordEncoder.matches(userRequestDto.getCurrentPassword(), master.getPassword())){
-            throw new IllegalArgumentException("비밀 번호가 틀롤링");
-        }
-        if (!userRequestDto.getNewPassword().isEmpty() && userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())){
-            master.updatePassword(passwordEncoder.encode(userRequestDto.getNewPassword()));
-        }
-        else if (!userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())) {
-            throw new IllegalArgumentException("변경하려는 비밀 번호가 틀롤링");
-        }
-            master.update(userRequestDto);
-        return new UserResponseDto(master);
-    }
 }
