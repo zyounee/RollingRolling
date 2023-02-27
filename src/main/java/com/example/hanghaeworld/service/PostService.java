@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +24,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository;
-    private final LikesRepository likesRepository;
+    private final PostLikeRepository postLikeRepository;
+
 
 
     @Transactional(readOnly = true)
@@ -128,38 +129,18 @@ public class PostService {
     }
 
     @Transactional
-    public LikeResponseDto like(LikeRequestDto likeRequestDto, Long postId, UserDetailsImpl userDetails) {
+    public void like(Long postId, UserDetailsImpl userDetails) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("없는 게시글입니다.")
         );
-        PostLike postLike = (new PostLike(likeRequestDto, post, userDetails.getUser()));
-        if (likeRequestDto.isLike() == true) {
-            likeRepository.saveAndFlush(new PostLike(likeRequestDto, post, userDetails.getUser()));
-            if (likeRepository.findByPost_IdAndUser_Id(userDetails.getUser().getId(), post.getId()).isPresent()) {
-            }
+        Optional<PostLike> postlikes = postLikeRepository.findByPostIdAndUserId(post.getId(), userDetails.getUser().getId());
+        if (postlikes.isPresent()) {
+            postLikeRepository.delete(postlikes.get());
         } else {
-            likeRepository.deleteById(userDetails.getUser().getId());
-            return null;
+            postLikeRepository.saveAndFlush(new PostLike(post, userDetails.getUser()));
         }
-        return new LikeResponseDto(postLike);
     }
 
-    @Transactional
-    public LikesResponseDto likes(LikeRequestDto likeRequestDto, Long commentId, UserDetailsImpl userDetails) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalArgumentException("없는 게시글입니다.")
-        );
-        CommentLike commentLike = (new CommentLike(likeRequestDto, comment, userDetails.getUser()));
-        if (likeRequestDto.isLike() == true) {
-            likesRepository.saveAndFlush(new CommentLike(likeRequestDto, comment, userDetails.getUser()));
-            if (likesRepository.findByComment_IdAndUser_Id(userDetails.getUser().getId(), comment.getId()).isPresent()) {
-            }
-        } else {
-            likesRepository.deleteById(userDetails.getUser().getId());
-            return null;
-        }
-        return new LikesResponseDto(commentLike);
-    }
 
     @Transactional
     public UserResponseDto updateProfile(Long masterId, UserRequestDto userRequestDto, User visitor) {
