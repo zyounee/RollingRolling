@@ -114,4 +114,21 @@ public class UserService {
         );
         return new UserResponseDto(user);
     }
+
+    @Transactional
+    public UserResponseDto updateProfile(UserRequestDto userRequestDto, User user) {
+        User master = userRepository.findById(user.getId()).orElseThrow(
+                () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        if (!passwordEncoder.matches(userRequestDto.getCurrentPassword(), master.getPassword())){
+            throw new IllegalArgumentException("비밀 번호가 틀롤링");
+        }
+        if (!userRequestDto.getNewPassword().isEmpty() && userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())){
+            master.updatePassword(passwordEncoder.encode(userRequestDto.getNewPassword()));
+        }
+        else if (!userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())) {
+            throw new IllegalArgumentException("변경하려는 비밀 번호가 틀롤링");
+        }
+        master.update(userRequestDto);
+        return new UserResponseDto(master);
+    }
 }

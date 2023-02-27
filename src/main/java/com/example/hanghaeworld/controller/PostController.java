@@ -60,13 +60,6 @@ public class PostController {
         postService.deletePost(postId, userDetails.getUser());
     }
 
-    //todo 여기에 /api 있던거 수정했습니다. 그런데 UserController로 옮겨야 하지 않나 싶습니다.
-    @PutMapping("/profile/{userId}")
-    public UserResponseDto updateProfile(@PathVariable Long userId,
-                                         @RequestBody UserRequestDto userRequestDto,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.updateProfile(userId, userRequestDto, userDetails.getUser());
-    }
 
     //todo 뭔가 void로 해도 될것 같아요. 프론트에서는 클릭하면 무조건 하트 색깔 전환 되고, 데이터는 저희가 알아서 처리하는 방식? 한번 논의를 해봐요
     @PostMapping("/post/like/{postId}")
