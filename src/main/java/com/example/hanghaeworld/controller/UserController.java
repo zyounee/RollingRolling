@@ -55,12 +55,6 @@ public class UserController {
         return userService.search(userSearchRequestDto);
     }
 
-    //내 정보 조회
-    @GetMapping("/mypage")
-    public UserResponseDto getMyProfile(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.getMyProfile(userDetails.getUsername());
-    }
-
     //내 정보 변경
     @PutMapping("/mypage")
     public UserResponseDto updateProfile(@RequestBody UserRequestDto userRequestDto,

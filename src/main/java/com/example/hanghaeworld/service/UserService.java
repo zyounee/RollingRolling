@@ -130,13 +130,6 @@ public class UserService {
         userRepository.save(likedUser);
         return new UserResponseDto(likedUser);
     }
-    @Transactional
-    public UserResponseDto getMyProfile(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
-        );
-        return new UserResponseDto(user);
-    }
 
     @Transactional
     public UserResponseDto updateProfile(UserRequestDto userRequestDto, User user) {
