@@ -25,16 +25,13 @@ public class User {
     private String password;
     @Column(nullable = false)
     private String nickname;
-    @Column
     @Email
+    @Column
     private String email;
-
     @Column
     private String image;
-
     @Column
     private String introduction;
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
