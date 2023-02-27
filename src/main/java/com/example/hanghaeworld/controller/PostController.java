@@ -1,12 +1,15 @@
 package com.example.hanghaeworld.controller;
+import com.example.hanghaeworld.service.S3UploadService;
 import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +17,7 @@ import javax.validation.Valid;
 public class PostController {
 
     private final PostService postService;
+    private final S3UploadService s3UploadService;
 
 
     @GetMapping("/post/mypost/{username}")
@@ -48,7 +52,7 @@ public class PostController {
         postService.deletePost(postId, userDetails.getUser());
     }
 
-    @PutMapping("/api/profile/{userId}")
+    @PutMapping("/profile/{userId}")
     public UserResponseDto updateProfile(@PathVariable Long userId,
                                       @Valid @RequestBody UserRequestDto userRequestDto,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -63,5 +67,10 @@ public class PostController {
     @PostMapping("/like/{commentId}")
     public LikesResponseDto likes(@RequestBody LikeRequestDto likeRequestDto, @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.likes(likeRequestDto, commentId, userDetails);
+    }
+
+    @PostMapping("/upload")
+    public String uploadImage (@RequestPart(value = "img") MultipartFile multipartFile) throws IOException {
+        return s3UploadService.uploadFiles(multipartFile, "rollingrollingbucket");
     }
 }
