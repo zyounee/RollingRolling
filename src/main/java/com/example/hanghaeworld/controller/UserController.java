@@ -1,10 +1,8 @@
 package com.example.hanghaeworld.controller;
 
 import com.example.hanghaeworld.dto.*;
-import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 

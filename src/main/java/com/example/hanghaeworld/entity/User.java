@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends TimeStamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -59,5 +59,10 @@ public class User {
     public void update(UserRequestDto userRequestDto) {
         this.image = userRequestDto.getImage();
         this.introduction = userRequestDto.getIntroduction();
+        this.nickname = userRequestDto.getNickname();
+    }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
     }
 }
