@@ -25,7 +25,7 @@ public class PostController {
     public BoardDto getPost(@PathVariable String username,
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails.getUser().getUsername().equals(username)) {
-            return postService.getMyPost(username);
+            return postService.getMyPost(username, userDetails.getUser());
         }
         return postService.getVisitPost(username, userDetails.getUser());
     }
@@ -35,7 +35,7 @@ public class PostController {
                                              @RequestParam("username") String username,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails.getUser().getUsername().equals(username)) {
-            return postService.getMyPage(username, pageNum);
+            return postService.getMyPage(username, pageNum, userDetails.getUser());
         }
         return postService.getVisitPage(username, pageNum, userDetails.getUser());
     }
