@@ -9,8 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +34,10 @@ public class User extends TimeStamped{
     private String image;
     @Column
     private String introduction;
-
     @Column
     private int likeCnt;
 
-    @OneToMany(mappedBy = "likesUser", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "likesUser", cascade=CascadeType.REMOVE)
     List<UserLike> likes = new ArrayList<>();
 
     @Column(nullable = false)
