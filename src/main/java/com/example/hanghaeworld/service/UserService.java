@@ -33,7 +33,6 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserLikeRepository userLikeRepository;
-    private final MailService mailService;
 
     @Transactional
     public void signup(@Valid SignupRequestDto signupRequestDto){
@@ -123,13 +122,15 @@ public class UserService {
             userRepository.save(likedUser);
 //            return new UserResponseDto(likedUser);
 
-            return new UserLikeResponseDto(false);
+            UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(false);
+            return userLikeResponseDto;
         }
         userLikeRepository.save(new UserLike(likedUser, likesUser));
         likedUser.setLikeCnt(likedUser.getLikeCnt()+1);
         userRepository.save(likedUser);
 //        return new UserResponseDto(likedUser);
-        return new UserLikeResponseDto(true);
+        UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(true);
+        return userLikeResponseDto;
     }
 
 

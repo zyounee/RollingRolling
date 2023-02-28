@@ -6,9 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserLikeResponseDto {
-    private boolean isLike;
+    private Boolean isLike;
 
-    public UserLikeResponseDto(boolean isLike) {
+    public UserLikeResponseDto(Boolean isLike) {
         this.isLike = isLike;
     }
 }
