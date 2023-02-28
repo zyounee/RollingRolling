@@ -25,26 +25,23 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
 
 
-
     @Transactional(readOnly = true)
-    public BoardDto getMyPost(String username) {
-        User master = getUser(username);
+    public BoardDto getMyPost(String username, User master) {
         List<Post> newPosts = postRepository.findByMaster_UsernameAndCommentNullOrderByCreatedAtAsc(username);
-        List<PostResponseDto> newPostList = postListToDto(newPosts);
+        List<PostResponseDto> newPostList = postListToDto(newPosts, master);
 
-        Page<PostResponseDto> page = getMyPage(username, 1);
+        Page<PostResponseDto> page = getMyPage(username, 1, master);
         return new BoardDto(true, master, newPostList, page);
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> getMyPage(String username, int pageNum) {
+    public Page<PostResponseDto> getMyPage(String username, int pageNum, User master) {
         Pageable pageable = getPageable(pageNum);
         List<Post> posts = postRepository.findByMaster_UsernameAndCommentNotNull(username, pageable);
-        List<PostResponseDto> postDtoList = postListToDto(posts);
+        List<PostResponseDto> postDtoList = postListToDto(posts, master);
         return new PageImpl<>(postDtoList, pageable, postDtoList.size());
     }
 
@@ -52,7 +49,7 @@ public class PostService {
     public BoardDto getVisitPost(String username, User visitor) {
         User master = getUser(username);
         List<Post> myPosts = postRepository.findByMaster_UsernameAndVisitor_IdOrderByCreatedAtDesc(username, visitor.getId());
-        List<PostResponseDto> myPostList = postListToDto(myPosts);
+        List<PostResponseDto> myPostList = postListToDto(myPosts, visitor);
 
         Page<PostResponseDto> page = getVisitPage(username, 1, visitor);
         return new BoardDto(false, master, myPostList, page);
@@ -62,7 +59,7 @@ public class PostService {
     public Page<PostResponseDto> getVisitPage(String username, int pageNum, User visitor) {
         Pageable pageable = getPageable(pageNum);
         List<Post> posts = postRepository.findByMaster_UsernameAndVisitor_IdNot(username, visitor.getId(), pageable);
-        List<PostResponseDto> postDtoList = postListToDto(posts);
+        List<PostResponseDto> postDtoList = postListToDto(posts, visitor);
         return new PageImpl<>(postDtoList, pageable, postDtoList.size());
     }
 
@@ -71,7 +68,7 @@ public class PostService {
         User master = getUser(username);
         Post post = new Post(master, postRequestDto, user);
         postRepository.save(post);
-        return new PostResponseDto(post);
+        return new PostResponseDto(post, user);
     }
 
     @Transactional
@@ -81,7 +78,7 @@ public class PostService {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
         post.update(postRequestDto);
-        return new PostResponseDto(post);
+        return new PostResponseDto(post, user);
     }
 
     @Transactional
@@ -104,30 +101,23 @@ public class PostService {
 
     private Pageable getPageable(int page) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page - 1, 3, sort);
-        return pageable;
+        return PageRequest.of(page - 1, 3, sort);
     }
 
-    private List<PostResponseDto> postListToDto(List<Post> newPosts) {
+    private List<PostResponseDto> postListToDto(List<Post> newPosts, User user) {
         List<PostResponseDto> newPostList = new ArrayList<>();
         for (Post post : newPosts) {
-            newPostList.add(new PostResponseDto(post));
+            newPostList.add(new PostResponseDto(post, user));
         }
         return newPostList;
     }
 
     private boolean confirmVisitor(Post post, User user) {
-        if (post.getComment() == null && post.getVisitor().equals(user.getUsername())) {
-            return true;
-        }
-        return false;
+        return post.getComment() == null && post.getVisitor().getUsername().equals(user.getUsername());
     }
 
     private boolean confirmMaster(Post post, User user) {
-        if (post.getMaster().getUsername().equals(user.getUsername())) {
-            return true;
-        }
-        return false;
+        return post.getMaster().getUsername().equals(user.getUsername());
     }
 
     @Transactional
