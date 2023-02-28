@@ -13,16 +13,13 @@ import com.example.hanghaeworld.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-//import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +33,7 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserLikeRepository userLikeRepository;
+    private final MailService mailService;
 
     @Transactional
     public void signup(@Valid SignupRequestDto signupRequestDto){
@@ -148,11 +146,12 @@ public class UserService {
     }
 
     @Transactional
-    public void checkPassword(PasswordRequestDto passwordRequestDto, User user) {
+    public boolean checkPassword(PasswordRequestDto passwordRequestDto, User user) {
         User master = userRepository.findById(user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
         if (!passwordEncoder.matches(passwordRequestDto.getPassword(), master.getPassword())){
             throw new IllegalArgumentException("비밀 번호가 틀롤링");
         }
+        return true;
     }
 }
