@@ -154,4 +154,8 @@ public class UserService {
         }
         return true;
     }
+
+    public UserResponseDto getInfo(User user) {
+        return new UserResponseDto(user);
+    }
 }

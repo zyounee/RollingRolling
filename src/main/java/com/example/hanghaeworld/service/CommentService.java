@@ -31,7 +31,7 @@ public class CommentService {
         );
         if (Objects.equals(post.getMaster().getUsername(), userDetails.getUsername())){
             Comment comment = commentRepository.saveAndFlush(new Comment(commentRequestDto,post,userDetails.getUser()));
-            return new CommentResponseDto(comment);
+            return new CommentResponseDto(comment,userDetails.getUser());
         }else{
             throw new IllegalArgumentException("마스터가 아닙니다");
         }
