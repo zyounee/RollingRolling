@@ -2,7 +2,6 @@ package com.example.hanghaeworld.dto;
 
 import com.example.hanghaeworld.entity.Comment;
 import com.example.hanghaeworld.entity.CommentLike;
-import com.example.hanghaeworld.entity.PostLike;
 import com.example.hanghaeworld.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
