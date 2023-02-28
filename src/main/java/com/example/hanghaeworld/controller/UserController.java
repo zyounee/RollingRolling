@@ -54,6 +54,17 @@ public class UserController {
     public UserSearchResponseDto search(@RequestBody UserSearchRequestDto userSearchRequestDto){
         return userService.search(userSearchRequestDto);
     }
+    @PostMapping("/user/checkpwd")
+    public ModelAndView checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.checkPassword(passwordRequestDto, userDetails.getUser());
+    }
+    //내 정보 변경
+    @PutMapping("/mypage")
+    public UserResponseDto updateProfile(@RequestBody UserRequestDto userRequestDto,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.updateProfile(userRequestDto, userDetails.getUser());
+    }
 
     @PostMapping("user/like/{likedUserid}")
     public UserResponseDto likeUser(@PathVariable Long likedUserid, @AuthenticationPrincipal UserDetailsImpl userDetails){

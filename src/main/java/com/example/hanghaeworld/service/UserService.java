@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -131,13 +132,11 @@ public class UserService {
         return new UserResponseDto(likedUser);
     }
 
+
     @Transactional
     public UserResponseDto updateProfile(UserRequestDto userRequestDto, User user) {
         User master = userRepository.findById(user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-        if (!passwordEncoder.matches(userRequestDto.getCurrentPassword(), master.getPassword())){
-            throw new IllegalArgumentException("비밀 번호가 틀롤링");
-        }
         if (!userRequestDto.getNewPassword().isEmpty() && userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())){
             master.updatePassword(passwordEncoder.encode(userRequestDto.getNewPassword()));
         }
@@ -146,5 +145,15 @@ public class UserService {
         }
         master.update(userRequestDto);
         return new UserResponseDto(master);
+    }
+
+    @Transactional
+    public ModelAndView checkPassword(PasswordRequestDto passwordRequestDto, User user) {
+        User master = userRepository.findById(user.getId()).orElseThrow(
+                () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        if (!passwordEncoder.matches(passwordRequestDto.getPassword(), master.getPassword())){
+            throw new IllegalArgumentException("비밀 번호가 틀롤링");
+        }
+        return new ModelAndView ("mypage");
     }
 }
