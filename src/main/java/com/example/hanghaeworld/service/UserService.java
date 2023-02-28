@@ -156,4 +156,8 @@ public class UserService {
             throw new IllegalArgumentException("비밀 번호가 틀롤링");
         }
     }
+
+    public UserResponseDto getInfo(User user) {
+        return new UserResponseDto(user);
+    }
 }

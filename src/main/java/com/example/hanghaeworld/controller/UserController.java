@@ -28,6 +28,10 @@ public class UserController {
         return modelAndView;
     }
 
+    @GetMapping("/user/info")
+    public UserResponseDto getInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.getInfo(userDetails.getUser());
+    }
 
     @PostMapping("/user/login")
     public UserResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
