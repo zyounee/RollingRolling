@@ -113,7 +113,7 @@ public class UserService {
         return new UserSearchResponseDto(user, newPostCnt, comPostCnt);
     }
 
-    public boolean likeUser(Long likedUserid, UserDetailsImpl userDetails) {
+    public UserLikeResponseDto likeUser(Long likedUserid, UserDetailsImpl userDetails) {
         User likedUser = userRepository.findById(likedUserid).orElseThrow(
                 () -> new NullPointerException("해당 유저가 없습니다.")
         );
@@ -124,13 +124,14 @@ public class UserService {
             likedUser.setLikeCnt(likedUser.getLikeCnt()-1);
             userRepository.save(likedUser);
 //            return new UserResponseDto(likedUser);
-            return false;
+
+            return new UserLikeResponseDto(false);
         }
         userLikeRepository.save(new UserLike(likedUser, likesUser));
         likedUser.setLikeCnt(likedUser.getLikeCnt()+1);
         userRepository.save(likedUser);
 //        return new UserResponseDto(likedUser);
-        return true;
+        return new UserLikeResponseDto(true);
     }
 
 
