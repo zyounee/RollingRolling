@@ -2,6 +2,7 @@ package com.example.hanghaeworld.controller;
 
 import com.example.hanghaeworld.dto.*;
 import com.example.hanghaeworld.security.UserDetailsImpl;
+import com.example.hanghaeworld.service.MailService;
 import com.example.hanghaeworld.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,11 +19,13 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final MailService mailService;
 
 
     @PostMapping("/user/signup")
     public ModelAndView signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
+        mailService.sendMail(new MailDto(signupRequestDto));
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         return modelAndView;
@@ -51,9 +54,9 @@ public class UserController {
         return userService.search(userSearchRequestDto);
     }
     @PostMapping("/user/checkpwd")
-    public void checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
+    public boolean checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        userService.checkPassword(passwordRequestDto, userDetails.getUser());
+        return userService.checkPassword(passwordRequestDto, userDetails.getUser());
     }
     //내 정보 변경
     @PutMapping("/mypage")
