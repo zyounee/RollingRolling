@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class MailService {
     private final JavaMailSender mailSender;
 
-    @Value("${username}")
     private String sender;
 
     public MailService(JavaMailSender mailSender) {
