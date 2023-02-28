@@ -47,9 +47,9 @@ public class UserController {
         return userService.search(userSearchRequestDto);
     }
     @PostMapping("/user/checkpwd")
-    public ModelAndView checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
+    public void checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.checkPassword(passwordRequestDto, userDetails.getUser());
+        userService.checkPassword(passwordRequestDto, userDetails.getUser());
     }
     //내 정보 변경
     @PutMapping("/mypage")

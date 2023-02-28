@@ -148,12 +148,11 @@ public class UserService {
     }
 
     @Transactional
-    public ModelAndView checkPassword(PasswordRequestDto passwordRequestDto, User user) {
+    public void checkPassword(PasswordRequestDto passwordRequestDto, User user) {
         User master = userRepository.findById(user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
         if (!passwordEncoder.matches(passwordRequestDto.getPassword(), master.getPassword())){
             throw new IllegalArgumentException("비밀 번호가 틀롤링");
         }
-        return new ModelAndView ("mypage");
     }
 }
