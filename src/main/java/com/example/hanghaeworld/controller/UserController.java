@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @PostMapping("user/like/{likedUserid}")
-    public UserResponseDto likeUser(@PathVariable Long likedUserid, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public boolean likeUser(@PathVariable Long likedUserid, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.likeUser(likedUserid, userDetails);
     }
 
