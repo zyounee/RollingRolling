@@ -11,6 +11,7 @@ public class UserResponseDto {
     private String nickname;
     private String image;
     private String introduction;
+    private String email;
     private int likeCnt;
 
     public UserResponseDto(User user){
@@ -18,6 +19,7 @@ public class UserResponseDto {
         this.nickname = user.getNickname();
         this.image = user.getImage();
         this.introduction = user.getIntroduction();
+        this.email = user.getEmail();
         this.likeCnt = user.getLikeCnt();
     }
 }
