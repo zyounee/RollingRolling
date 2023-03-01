@@ -25,7 +25,7 @@ public class UserController {
     @PostMapping("/user/signup")
     public ModelAndView signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
-        mailService.sendMail(new MailDto(signupRequestDto));
+        //mailService.sendMail(new MailDto(signupRequestDto));
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         return modelAndView;

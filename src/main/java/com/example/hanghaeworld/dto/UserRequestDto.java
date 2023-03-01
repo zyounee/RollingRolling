@@ -17,7 +17,6 @@ public class UserRequestDto {
     private String newPasswordConfirm;
     @NotNull
     private String nickname;
-    @NotNull
     @Email
     private String email;
 }
