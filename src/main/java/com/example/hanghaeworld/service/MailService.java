@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 public class MailService {
     private final JavaMailSender mailSender;
 
+
     private String sender;
 
     public MailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
-
 
     public void sendMail(MailDto mailDto) throws MailException {
         SimpleMailMessage message = new SimpleMailMessage();
