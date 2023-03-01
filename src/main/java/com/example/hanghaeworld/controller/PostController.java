@@ -67,7 +67,7 @@ public class PostController {
         postService.like(postId, userDetails);
     }
 
-    @PostMapping(consumes = {"multipart/form-data"}, value="/upload")
+    @PostMapping("/upload")
     public String uploadImage (@RequestParam(value = "img") MultipartFile multipartFile) throws IOException {
         return s3UploadService.uploadFiles(multipartFile, "rollingrollingbucket");
     }
