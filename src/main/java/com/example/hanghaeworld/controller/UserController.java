@@ -33,7 +33,7 @@ public class UserController {
 
     @GetMapping("/user/info")
     public UserResponseDto getInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.getInfo(userDetails.getUser());
+        return userService.getInfo(userDetails.getUsername());
     }
 
     @PostMapping("/user/login")
