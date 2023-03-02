@@ -100,7 +100,8 @@ public class PostService {
 
     private Pageable getPageable(int page) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        return PageRequest.of(page - 1, 3, sort);
+        // front 에서 page 구현이 아직 안되어서 999로 변경
+        return PageRequest.of(page - 1, 999, sort);
     }
 
     private List<PostResponseDto> postListToDto(List<Post> newPosts, User user) {
