@@ -116,6 +116,7 @@
 
 ## 📋 ERD Diagram
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bb36dcda-01f4-4617-a9e5-9bb105685430/Untitled.jpeg)
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/51226340/222372453-9436d4a3-83a4-4301-b0fe-65c6f2f51df3.png">
+
 
 ## 📝 Technologies & Tools (BE) 📝
