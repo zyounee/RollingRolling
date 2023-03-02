@@ -110,8 +110,8 @@ public class UserService {
         return new UserSearchResponseDto(user, newPostCnt, comPostCnt);
     }
 
-    public UserLikeResponseDto likeUser(Long likedUserid, UserDetailsImpl userDetails) {
-        User likedUser = userRepository.findById(likedUserid).orElseThrow(
+    public UserLikeResponseDto likeUser(String likedUsername, UserDetailsImpl userDetails) {
+        User likedUser = userRepository.findByUsername(likedUsername).orElseThrow(
                 () -> new NullPointerException("해당 유저가 없습니다.")
         );
         User likesUser = userDetails.getUser();

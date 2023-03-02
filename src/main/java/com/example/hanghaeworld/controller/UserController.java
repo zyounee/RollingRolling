@@ -65,9 +65,9 @@ public class UserController {
         return userService.updateProfile(userRequestDto, userDetails.getUser());
     }
 
-    @PostMapping("user/like/{likedUserid}")
-    public UserLikeResponseDto likeUser(@PathVariable Long likedUserid, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.likeUser(likedUserid, userDetails);
+    @PostMapping("user/like/{likedUsername}")
+    public UserLikeResponseDto likeUser(@PathVariable String likedUsername, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.likeUser(likedUsername, userDetails);
     }
 
 }
