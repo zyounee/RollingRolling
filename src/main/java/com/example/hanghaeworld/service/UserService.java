@@ -41,9 +41,17 @@ public class UserService {
         String nickname = signupRequestDto.getNickname();
         String email = signupRequestDto.getEmail();
 
-        Optional<User> found = userRepository.findByUsername(username);
-        if (found.isPresent()){
+        Optional<User> foundUsername = userRepository.findByUsername(username);
+        if (foundUsername.isPresent()){
             throw new IllegalArgumentException("중복된 사용자 존재");
+        }
+        Optional<User> foundEmail = userRepository.findByEmail(email);
+        if (foundEmail.isPresent()){
+            throw new IllegalArgumentException("중복된 이메일 존재");
+        }
+        Optional<User> foundNickname = userRepository.findByNickname(nickname);
+        if (foundNickname.isPresent()){
+            throw new IllegalArgumentException("중복된 닉네임 존재");
         }
         UserRoleEnum role = UserRoleEnum.USER;
 
