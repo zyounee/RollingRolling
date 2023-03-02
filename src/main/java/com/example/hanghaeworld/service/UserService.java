@@ -130,7 +130,7 @@ public class UserService {
         User likesUser = userDetails.getUser();
         Optional<UserLike> optionalUserLike = userLikeRepository.findByLikedUserAndLikesUser(likedUser, likesUser);
 
-        if (likeRequestDto.isLiked()){
+        if (optionalUserLike.isPresent()){
             userLikeRepository.delete(optionalUserLike.get());
             likedUser.setLikeCnt(likedUser.getLikeCnt()-1);
 //            userRepository.save(likedUser);
