@@ -10,13 +10,11 @@ import com.example.hanghaeworld.repository.PostRepository;
 import com.example.hanghaeworld.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -122,16 +120,21 @@ public class PostService {
     }
 
     @Transactional
-    public void like(Long postId, UserDetailsImpl userDetails) {
+    public LikeResponseDto like(Long postId, LikeRequestDto likeRequestDto, UserDetailsImpl userDetails) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("없는 게시글입니다.")
         );
-        Optional<PostLike> postlikes = postLikeRepository.findByPostIdAndUserId(post.getId(), userDetails.getUser().getId());
-        if (postlikes.isPresent()) {
-            postLikeRepository.delete(postlikes.get());
+
+        if (likeRequestDto.isLiked()) {
+            PostLike postlikes = postLikeRepository.findByPostIdAndUserId(post.getId(), userDetails.getUser().getId()).orElseThrow(
+                    () -> new IllegalArgumentException("좋아요 정보가 잘못되었습니다.")
+            );
+            postLikeRepository.delete(postlikes);
         } else {
             postLikeRepository.saveAndFlush(new PostLike(post, userDetails.getUser()));
         }
+
+        return new LikeResponseDto(!likeRequestDto.isLiked(), post.getPostLikes().size());
     }
 
 }

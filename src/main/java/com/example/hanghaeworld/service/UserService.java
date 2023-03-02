@@ -115,27 +115,28 @@ public class UserService {
         return new UserSearchResponseDto(user, newPostCnt, comPostCnt);
     }
 
-    public UserLikeResponseDto likeUser(String likedUsername, UserDetailsImpl userDetails) {
+    public LikeResponseDto likeUser(String likedUsername, LikeRequestDto likeRequestDto, UserDetailsImpl userDetails) {
         User likedUser = userRepository.findByUsername(likedUsername).orElseThrow(
                 () -> new NullPointerException("해당 유저가 없습니다.")
         );
         User likesUser = userDetails.getUser();
         Optional<UserLike> optionalUserLike = userLikeRepository.findByLikedUserAndLikesUser(likedUser, likesUser);
+
         if (optionalUserLike.isPresent()){
             userLikeRepository.deleteById(optionalUserLike.get().getId());
             likedUser.setLikeCnt(likedUser.getLikeCnt()-1);
             userRepository.save(likedUser);
 //            return new UserResponseDto(likedUser);
 
-            UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(false);
-            return userLikeResponseDto;
+//            UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(false);
+            return new LikeResponseDto(!likeRequestDto.isLiked(), likesUser.getLikeCnt());
         }
         userLikeRepository.save(new UserLike(likedUser, likesUser));
         likedUser.setLikeCnt(likedUser.getLikeCnt()+1);
         userRepository.save(likedUser);
 //        return new UserResponseDto(likedUser);
-        UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(true);
-        return userLikeResponseDto;
+//        UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(true);
+        return new LikeResponseDto(!likeRequestDto.isLiked(), likesUser.getLikeCnt());
     }
 
 
