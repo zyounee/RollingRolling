@@ -29,7 +29,7 @@
 
 > 방문자의 질문, 사이트 주인의 답변, 그리고 유저의 프로필에 각각 좋아요를 추가할 수 있습니다. 이미 좋아요를 한 상태에서 한 번 더 좋아요를 등록하면 좋아요가 취소되어 값이 반환됩니다.
 > 
-<img width="546" alt="image" src="https://user-images.githubusercontent.com/51226340/222370888-f9fae13d-de24-4e4e-a588-3961fefe4a80.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/51226340/222370888-f9fae13d-de24-4e4e-a588-3961fefe4a80.png">
 
 ### 👨‍💻 마이페이지 기능 (내 정보 수정) - 정환
 
@@ -53,8 +53,8 @@
 
 > 회원 가입시 회원 가입이 완료되었다는 메시지가 등록한 이메일로 전송됩니다.
 > 
-    
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/87be44d7-c55d-419e-a02f-46971dd674cd/Untitled.png)
+    ![image](https://user-images.githubusercontent.com/51226340/222371998-89ad8dc0-d1d5-4316-bd72-3666a56eb067.png)
+
     
 
 ## 적용 기술
