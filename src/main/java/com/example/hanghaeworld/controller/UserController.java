@@ -50,8 +50,8 @@ public class UserController {
 
     //특정 회원 검색 조회
     @GetMapping("/user/search")
-    public UserSearchResponseDto search(@RequestBody UserSearchRequestDto userSearchRequestDto){
-        return userService.search(userSearchRequestDto);
+    public UserSearchResponseDto search(@RequestParam String nickname){
+        return userService.search(nickname);
     }
     @PostMapping("/user/checkpwd")
     public boolean checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
