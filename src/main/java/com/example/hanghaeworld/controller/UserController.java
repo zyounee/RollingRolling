@@ -33,7 +33,7 @@ public class UserController {
 
     @GetMapping("/user/info")
     public UserResponseDto getInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.getInfo(userDetails.getUser());
+        return userService.getInfo(userDetails.getUsername());
     }
 
     @PostMapping("/user/login")
@@ -66,8 +66,10 @@ public class UserController {
     }
 
     @PostMapping("user/like/{likedUsername}")
-    public UserLikeResponseDto likeUser(@PathVariable String likedUsername, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.likeUser(likedUsername, userDetails);
+    public LikeResponseDto likeUser(@PathVariable String likedUsername,
+                                        @RequestBody LikeRequestDto likeRequestDto,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.likeUser(likedUsername, likeRequestDto, userDetails);
     }
 
 }

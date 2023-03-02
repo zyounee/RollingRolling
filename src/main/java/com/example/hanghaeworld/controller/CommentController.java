@@ -3,6 +3,8 @@ package com.example.hanghaeworld.controller;
 import com.example.hanghaeworld.dto.CommentRequestDto;
 import com.example.hanghaeworld.dto.CommentResponseDto;
 
+import com.example.hanghaeworld.dto.LikeRequestDto;
+import com.example.hanghaeworld.dto.LikeResponseDto;
 import com.example.hanghaeworld.security.UserDetailsImpl;
 import com.example.hanghaeworld.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,9 @@ public class CommentController {
     }
 
     @PostMapping("/comment/like/{commentId}")
-    public void likes( @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        commentService.likes(commentId, userDetails);
+    public LikeResponseDto likes(@PathVariable Long commentId,
+                                 @RequestBody LikeRequestDto likeRequestDto,
+                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.likes(commentId, likeRequestDto, userDetails);
     }
 }
