@@ -50,8 +50,8 @@ public class UserController {
 
     //특정 회원 검색 조회
     @GetMapping("/user/search")
-    public UserSearchResponseDto search(@RequestBody UserSearchRequestDto userSearchRequestDto){
-        return userService.search(userSearchRequestDto);
+    public UserSearchResponseDto search(@RequestParam String nickname){
+        return userService.search(nickname);
     }
     @PostMapping("/user/checkpwd")
     public boolean checkPassword(@RequestBody PasswordRequestDto passwordRequestDto,
@@ -65,9 +65,9 @@ public class UserController {
         return userService.updateProfile(userRequestDto, userDetails.getUser());
     }
 
-    @PostMapping("user/like/{likedUserid}")
-    public UserLikeResponseDto likeUser(@PathVariable Long likedUserid, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.likeUser(likedUserid, userDetails);
+    @PostMapping("user/like/{likedUsername}")
+    public UserLikeResponseDto likeUser(@PathVariable String likedUsername, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.likeUser(likedUsername, userDetails);
     }
 
 }
