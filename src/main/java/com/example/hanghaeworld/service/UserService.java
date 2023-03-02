@@ -164,7 +164,10 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getInfo(User user) {
+    public UserResponseDto getInfo(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저가 없습니다.")
+        );
         return new UserResponseDto(user);
     }
 }
