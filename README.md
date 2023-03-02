@@ -53,7 +53,8 @@
 
 > 회원 가입시 회원 가입이 완료되었다는 메시지가 등록한 이메일로 전송됩니다.
 > 
-![image](https://user-images.githubusercontent.com/51226340/222372089-e3fcac82-0b77-423a-9142-11e3e80d0865.png)
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/51226340/222372233-8ebd7e24-429a-4244-a28f-ed3bd315493e.png">
+
 
 
     
