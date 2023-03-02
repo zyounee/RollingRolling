@@ -6,8 +6,8 @@
 
 > 회원가입 후 같은 정보로 로그인을 할 수 있습니다. 로그인에 성공하여 토큰을 발급 받아야만 모든 페이지를 정상적으로 이용할 수 있습니다.
 > 
-<img width="1440" alt="image" src="https://user-images.githubusercontent.com/51226340/222370232-476ca711-f632-472d-89a6-ca82b72b3c4e.png">
-<img width="1440" alt="image" src="https://user-images.githubusercontent.com/51226340/222370351-6402b328-362c-423f-a639-c2d86a9252ec.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/51226340/222370232-476ca711-f632-472d-89a6-ca82b72b3c4e.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/51226340/222370351-6402b328-362c-423f-a639-c2d86a9252ec.png">
 
 
 ### 🌟 회원 목록 조회
@@ -15,7 +15,8 @@
 > home 화면에서 RollingRolling을 이용하는 모든 사용자의 rolling 페이지를 한 눈에 모아볼 수 있습니다. 
 그 중에 찾고자 하는 회원이 있다면 알고 있는 닉네임으로 해당 회원의 Rolling 사이트를 조회할 수 있습니다.
 > 
-- 미리보기
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/51226340/222370590-b7321a45-b190-458a-b942-3fbe7c2a8742.png">
+
 
 ### ✏️ Post & Comment
 
