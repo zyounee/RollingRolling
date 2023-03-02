@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class UserSearchRequestDto {
-    private String input;
+//    private String input;
     private String searchType;
 }

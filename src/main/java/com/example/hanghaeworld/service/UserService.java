@@ -81,19 +81,24 @@ public class UserService {
     }
 
     @Transactional
-    public UserSearchResponseDto search(UserSearchRequestDto userSearchRequestDto){
-        User user = null;
-        // searchType이 username일 때
-        if (userSearchRequestDto.getSearchType().equals("username")){
-            user = userRepository.findByUsername(userSearchRequestDto.getInput()).orElseThrow(
-                    () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
-            );
-            // searchType이 nickname일 때
-        } else if (userSearchRequestDto.getSearchType().equals("nickname")) {
-            user = userRepository.findByNickname(userSearchRequestDto.getInput()).orElseThrow(
-                    () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
-            );
-        }
+    public UserSearchResponseDto search(String nickname){
+//        User user = null;
+//        // searchType이 username일 때
+//        if (userSearchRequestDto.getSearchType().equals("username")){
+//            user = userRepository.findByUsername(input).orElseThrow(
+//                    () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+//            );
+//            // searchType이 nickname일 때
+//        } else if (userSearchRequestDto.getSearchType().equals("nickname")) {
+//            user = userRepository.findByNickname(input).orElseThrow(
+//                    () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+//            );
+//        }
+
+        User user = userRepository.findByNickname(nickname).orElseThrow(
+                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다")
+        );
+
         // 이 유저의 id를 ? master_id로 가진 post id를 알아내
         List<Post> posts = postRepository.findAllByMasterId(user.getId());
         int newPostCnt = 0;
@@ -110,8 +115,8 @@ public class UserService {
         return new UserSearchResponseDto(user, newPostCnt, comPostCnt);
     }
 
-    public UserLikeResponseDto likeUser(Long likedUserid, UserDetailsImpl userDetails) {
-        User likedUser = userRepository.findById(likedUserid).orElseThrow(
+    public UserLikeResponseDto likeUser(String likedUsername, UserDetailsImpl userDetails) {
+        User likedUser = userRepository.findByUsername(likedUsername).orElseThrow(
                 () -> new NullPointerException("해당 유저가 없습니다.")
         );
         User likesUser = userDetails.getUser();
