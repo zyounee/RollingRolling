@@ -63,4 +63,6 @@ public class User extends TimeStamped{
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
+
+    public void updateLike(boolean )
 }

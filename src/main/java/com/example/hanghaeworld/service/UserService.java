@@ -35,22 +35,22 @@ public class UserService {
     private final UserLikeRepository userLikeRepository;
 
     @Transactional
-    public void signup(@Valid SignupRequestDto signupRequestDto){
+    public void signup(@Valid SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
         String nickname = signupRequestDto.getNickname();
         String email = signupRequestDto.getEmail();
 
         Optional<User> foundUsername = userRepository.findByUsername(username);
-        if (foundUsername.isPresent()){
+        if (foundUsername.isPresent()) {
             throw new IllegalArgumentException("중복된 사용자 존재");
         }
         Optional<User> foundEmail = userRepository.findByEmail(email);
-        if (foundEmail.isPresent()){
+        if (foundEmail.isPresent()) {
             throw new IllegalArgumentException("중복된 이메일 존재");
         }
         Optional<User> foundNickname = userRepository.findByNickname(nickname);
-        if (foundNickname.isPresent()){
+        if (foundNickname.isPresent()) {
             throw new IllegalArgumentException("중복된 닉네임 존재");
         }
         UserRoleEnum role = UserRoleEnum.USER;
@@ -60,7 +60,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response){
+    public UserResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
 
@@ -68,7 +68,7 @@ public class UserService {
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다")
         );
 
-        if (!passwordEncoder.matches(password, user.getPassword())){
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("비밀 번호가 틀롤링");
         }
 
@@ -78,18 +78,18 @@ public class UserService {
 
     //전체 회원 조회
     @Transactional
-    public List<UserResponseDto> getUsers(int page){
+    public List<UserResponseDto> getUsers(int page) {
         //Sort sort = Sort.by(Sort.Direction.ASC, "nickname");
-        Pageable pageable = PageRequest.of(page - 1,30);
+        Pageable pageable = PageRequest.of(page - 1, 30);
         List<User> users = userRepository.findAllByOrderByNicknameAsc(pageable);
         List<UserResponseDto> userResponseDtos = users.stream()
-                .map(user-> new UserResponseDto(user))
+                .map(user -> new UserResponseDto(user))
                 .collect(Collectors.toList());
         return userResponseDtos;
     }
 
     @Transactional
-    public UserSearchResponseDto search(String nickname){
+    public UserSearchResponseDto search(String nickname) {
 //        User user = null;
 //        // searchType이 username일 때
 //        if (userSearchRequestDto.getSearchType().equals("username")){
@@ -114,8 +114,8 @@ public class UserService {
         // 반복문을 돌면서 post:posts에 comment가 없으면 new값을 +1
         // 반복문이 끝나면 comansCnt = posts.size()-new
 
-        for (Post post: posts){
-            if (post.getComment() == null){
+        for (Post post : posts) {
+            if (post.getComment() == null) {
                 newPostCnt++;
             }
         }
@@ -130,21 +130,26 @@ public class UserService {
         User likesUser = userDetails.getUser();
         Optional<UserLike> optionalUserLike = userLikeRepository.findByLikedUserAndLikesUser(likedUser, likesUser);
 
-        if (optionalUserLike.isPresent()){
+        int count = likedUser.getLikeCnt();
+
+        if (optionalUserLike.isPresent()) {
             userLikeRepository.delete(optionalUserLike.get());
-            likedUser.setLikeCnt(likedUser.getLikeCnt()-1);
+
+            likedUser.setLikeCnt(count - 1);
 //            userRepository.save(likedUser);
 //            return new UserResponseDto(likedUser);
 
 //            UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(false);
-            return new LikeResponseDto(!likeRequestDto.isLiked(), likedUser.getLikeCnt());
+            return new LikeResponseDto(!likeRequestDto.isLiked(), count - 1);
         }
+
+
         userLikeRepository.save(new UserLike(likedUser, likesUser));
-        likedUser.setLikeCnt(likedUser.getLikeCnt()+1);
+        likedUser.setLikeCnt(count + 1);
 //        userRepository.save(likedUser);
 //        return new UserResponseDto(likedUser);
 //        UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(true);
-        return new LikeResponseDto(!likeRequestDto.isLiked(), likedUser.getLikeCnt());
+        return new LikeResponseDto(!likeRequestDto.isLiked(), count + 1);
     }
 
 
@@ -152,10 +157,9 @@ public class UserService {
     public UserResponseDto updateProfile(UserRequestDto userRequestDto, User user) {
         User master = userRepository.findById(user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-        if (!userRequestDto.getNewPassword().isEmpty() && userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())){
+        if (!userRequestDto.getNewPassword().isEmpty() && userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())) {
             master.updatePassword(passwordEncoder.encode(userRequestDto.getNewPassword()));
-        }
-        else if (!userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())) {
+        } else if (!userRequestDto.getNewPassword().equals(userRequestDto.getNewPasswordConfirm())) {
             throw new IllegalArgumentException("변경하려는 비밀 번호가 틀롤링");
         }
         master.update(userRequestDto);
@@ -166,7 +170,7 @@ public class UserService {
     public boolean checkPassword(PasswordRequestDto passwordRequestDto, User user) {
         User master = userRepository.findById(user.getId()).orElseThrow(
                 () -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-        if (!passwordEncoder.matches(passwordRequestDto.getPassword(), master.getPassword())){
+        if (!passwordEncoder.matches(passwordRequestDto.getPassword(), master.getPassword())) {
             throw new IllegalArgumentException("비밀 번호가 틀롤링");
         }
         return true;
