@@ -29,7 +29,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public BoardDto getMyPost(String username, String masterName) {
         User master = getUser(masterName);
-        List<Post> newPosts = postRepository.findByMaster_UsernameAndCommentNullOrderByCreatedAtAsc(username);
+        List<Post> newPosts = postRepository.findByMaster_UsernameAndCommentNullOrderByCreatedAtDesc(username);
         List<PostResponseDto> newPostList = postListToDto(newPosts, master);
 
         Page<PostResponseDto> page = getMyPage(username, 1, master);
