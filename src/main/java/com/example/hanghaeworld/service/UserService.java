@@ -130,21 +130,21 @@ public class UserService {
         User likesUser = userDetails.getUser();
         Optional<UserLike> optionalUserLike = userLikeRepository.findByLikedUserAndLikesUser(likedUser, likesUser);
 
-        if (optionalUserLike.isPresent()){
-            userLikeRepository.deleteById(optionalUserLike.get().getId());
+        if (likeRequestDto.isLiked()){
+            userLikeRepository.delete(optionalUserLike.get());
             likedUser.setLikeCnt(likedUser.getLikeCnt()-1);
-            userRepository.save(likedUser);
+//            userRepository.save(likedUser);
 //            return new UserResponseDto(likedUser);
 
 //            UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(false);
-            return new LikeResponseDto(!likeRequestDto.isLiked(), likesUser.getLikeCnt());
+            return new LikeResponseDto(!likeRequestDto.isLiked(), likedUser.getLikeCnt());
         }
         userLikeRepository.save(new UserLike(likedUser, likesUser));
         likedUser.setLikeCnt(likedUser.getLikeCnt()+1);
-        userRepository.save(likedUser);
+//        userRepository.save(likedUser);
 //        return new UserResponseDto(likedUser);
 //        UserLikeResponseDto userLikeResponseDto = new UserLikeResponseDto(true);
-        return new LikeResponseDto(!likeRequestDto.isLiked(), likesUser.getLikeCnt());
+        return new LikeResponseDto(!likeRequestDto.isLiked(), likedUser.getLikeCnt());
     }
 
 
