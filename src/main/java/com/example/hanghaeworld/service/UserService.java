@@ -163,6 +163,7 @@ public class UserService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public UserResponseDto getInfo(User user) {
         return new UserResponseDto(user);
     }

@@ -17,12 +17,12 @@ public class UserLike {
 
     //좋아요를 받는 유저
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "liked_user_id")
+    @JoinColumn(name = "liked_user_id", nullable = false)
     private User likedUser;
 
     //좋아요를 누르는 유저
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "likes_user_id")
+    @JoinColumn(name = "likes_user_id", nullable = false)
     private User likesUser;
 
     public UserLike(User likedUser, User likesUser) {

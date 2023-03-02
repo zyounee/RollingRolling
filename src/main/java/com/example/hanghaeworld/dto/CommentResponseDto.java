@@ -6,7 +6,7 @@ import com.example.hanghaeworld.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @NoArgsConstructor
@@ -14,7 +14,7 @@ public class CommentResponseDto {
     private Long commentId;
     private String content;
     private String nickname;
-    private LocalDateTime createdAt;
+    private String createdAt;
     private boolean liked;
     private int likeCount;
 
@@ -22,14 +22,13 @@ public class CommentResponseDto {
         this.commentId = comment.getId();
         this.content = comment.getContent();
         this.nickname = comment.getUser().getNickname();
-        this.createdAt = comment.getCreatedAt();
+        this.createdAt = comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         for (CommentLike commentLike : comment.getCommentLikes()){
             if (commentLike.getUser().equals(user)) {
                 this.liked = true;
                 break;
             }
         }
-
         this.likeCount = comment.getCommentLikes().size();
     }
 }
