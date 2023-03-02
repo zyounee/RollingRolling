@@ -24,8 +24,8 @@ public class PostController {
     @GetMapping("/post/{username}")
     public BoardDto getPost(@PathVariable String username,
                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails.getUser().getUsername().equals(username)) {
-            return postService.getMyPost(username, userDetails.getUser());
+        if (userDetails.getUsername().equals(username)) {
+            return postService.getMyPost(username, userDetails.getUsername());
         }
         return postService.getVisitPost(username, userDetails.getUser());
     }

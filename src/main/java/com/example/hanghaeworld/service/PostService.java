@@ -29,12 +29,13 @@ public class PostService {
 
 
     @Transactional(readOnly = true)
-    public BoardDto getMyPost(String username, User master) {
+    public BoardDto getMyPost(String username, String masterName) {
+        User master = getUser(masterName);
         List<Post> newPosts = postRepository.findByMaster_UsernameAndCommentNullOrderByCreatedAtAsc(username);
         List<PostResponseDto> newPostList = postListToDto(newPosts, master);
 
         Page<PostResponseDto> page = getMyPage(username, 1, master);
-        return new BoardDto(true, master, newPostList, page);
+        return new BoardDto(true, new UserResponseDto(master), newPostList, page);
     }
 
     @Transactional(readOnly = true)
@@ -52,7 +53,7 @@ public class PostService {
         List<PostResponseDto> myPostList = postListToDto(myPosts, visitor);
 
         Page<PostResponseDto> page = getVisitPage(username, 1, visitor);
-        return new BoardDto(false, master, myPostList, page);
+        return new BoardDto(false, new UserResponseDto(master), myPostList, page);
     }
 
     @Transactional(readOnly = true)
