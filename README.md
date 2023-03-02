@@ -6,7 +6,9 @@
 
 > 회원가입 후 같은 정보로 로그인을 할 수 있습니다. 로그인에 성공하여 토큰을 발급 받아야만 모든 페이지를 정상적으로 이용할 수 있습니다.
 > 
-- 미리보기
+<img width="1440" alt="image" src="https://user-images.githubusercontent.com/51226340/222370232-476ca711-f632-472d-89a6-ca82b72b3c4e.png">
+<img width="1440" alt="image" src="https://user-images.githubusercontent.com/51226340/222370351-6402b328-362c-423f-a639-c2d86a9252ec.png">
+
 
 ### 🌟 회원 목록 조회
 
