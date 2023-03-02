@@ -31,12 +31,11 @@
 ### 👨‍💻 마이페이지 기능 (내 정보 수정) - 정환
 
 > 마이페이지에서 프로필사진, 자기소개, 닉네임, 비밀번호를 수정할 수 있습니다. 비밀번호 수정란을 공백으로 둘 경우, 비밀번호는 변경하지 않고 나머지 항목만 수정할 수 있습니다.
-> 
-- 미리보기
-    
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e77c33b0-935d-4d3c-8eb0-c5c56addb1f5/Untitled.jpeg)
-    
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/734dc691-4de9-47f9-8715-7400a38666db/Untitled.jpeg)
+
+![image](https://user-images.githubusercontent.com/51226340/222369332-84f9953f-845c-4ee4-ab3c-4f7933f597ea.png)
+![image](https://user-images.githubusercontent.com/51226340/222369388-bb419fef-01a4-46ec-ad96-1f9e1a2bc204.png)
+
+
     
 
 ### ☑  페이징 처리
