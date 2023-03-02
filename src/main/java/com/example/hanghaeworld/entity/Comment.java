@@ -21,18 +21,18 @@ public class Comment extends TimeStamped {
     @Column(nullable = false)
     private String content;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "comment",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<CommentLike> commentLikes = new ArrayList<>();
 
-    public Comment(CommentRequestDto commentRequestDto,Post post,User user){
+    public Comment(CommentRequestDto commentRequestDto, Post post, User user) {
         this.content = commentRequestDto.getContent();
         this.post = post;
         this.user = user;
