@@ -22,8 +22,17 @@ public class UserResponseDto {
         this.image = user.getImage();
         this.introduction = user.getIntroduction();
         this.email = user.getEmail();
-        for (UserLike userLike : user.getLikes()) {
-            if (userLike.getLikesUser().getUsername().equals(user.getUsername())) {
+        this.likeCnt = user.getLikeCnt();
+    }
+
+    public UserResponseDto(User user, User loginUser){
+        this.username = user.getUsername();
+        this.nickname = user.getNickname();
+        this.image = user.getImage();
+        this.introduction = user.getIntroduction();
+        this.email = user.getEmail();
+        for (UserLike userLike : loginUser.getLikes()) {
+            if (userLike.getLikedUser().getUsername().equals(user.getUsername())) {
                 this.liked = true;
                 break;
             }

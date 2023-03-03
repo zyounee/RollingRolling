@@ -16,6 +16,5 @@ public class UserSearchResponseDto {
         this.userResponseDto = new UserResponseDto(user);
         this.newPostCnt = newPostCnt;
         this.comPostCnt = comPostCnt;
-        ;
     }
 }
